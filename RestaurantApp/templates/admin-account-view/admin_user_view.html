@@ -1,0 +1,68 @@
+{% extends 'admin-account-view/admin_header.html' %}
+{% block content %}
+{% load static %}
+
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                            <span class="ml-1">Datatable</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% static 'admin/javascript:void(0)' %}">Table</a></li>
+                            <li class="breadcrumb-item active"><a href="{% static 'admin/javascript:void(0)' %}">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Basic Datatable</h4>
+                            </div>
+                            <div class="card-body">
+                                <div style="color: black;" class="table-responsive">
+                                    <table id="example" class="display" style="min-width: 845px">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Contact Number</th>
+                                                <th>Email</th>
+                                                <th>Remove User</th>
+                                            </tr>
+                                            {% for a in data %}
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td> {{ a.name }}</td>
+                                                <td> {{ a.contact }}</td>
+                                                <td> {{ a.login_id.email }}</td>
+                                                <td> <a href="{% url 'admin_remove_user' a.id }"><img src="static/delete_icon.png" height="25px"></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {% endblock %}

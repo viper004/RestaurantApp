@@ -1,0 +1,211 @@
+{% extends 'user_header.html' %}
+{% block content %}
+
+  <!-- Modal styles (can be moved to your static CSS later) -->
+  <style>
+    /* ========== Backdrop ========== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;                               /* shorthand for top/left/right/bottom: 0 */
+  background: transparent;
+  backdrop-filter: blur(4px);             /* nice glassy blur */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.modal.show {
+  display: flex;
+  opacity: 1;
+}
+
+/* ========== Content Box ========== */
+.modal-content {
+  position: relative;                     /* for absolute close button */
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0);
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.modal.show .modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* ========== Close Button ========== */
+.modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.modal-close:hover {
+  color: #555;
+}
+
+/* ========== Icon & Text ========== */
+.modal-icon {
+  font-size: 3rem;
+  color: #4BB543;
+  margin-bottom: 0.5rem;
+}
+.modal-content h2 {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  color: #5bd926;
+}
+.modal-content p {
+  margin: 0;
+  color: #4BB543;
+  font-weight: 600;
+}
+
+.report-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: transparent;
+  }
+
+  .report-form {
+    background: transparent;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .report-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .report-form textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #00000000;
+    resize: none;
+    font-size: 16px;
+    font-family: inherit;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+  }
+
+  .report-form textarea:focus {
+    border-color: #ffffff;
+    outline: none;
+  }
+
+  .report-form input[type="submit"] {
+    padding: 12px 24px;
+    background-color: #ecb550;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+
+  .report-form input[type="submit"]:hover {
+    background-color: #d9363e;
+  }
+
+/* ========== Responsive Tweaks ========== */
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+  .modal-icon {
+    font-size: 2.5rem;
+  }
+}
+
+  </style>
+
+  <!-- Your report form -->
+  <div class="report-container">
+    <form method="POST"
+          class="report-form"
+          onsubmit="return handleReportSubmit(event)">
+      {% csrf_token %}
+      <h1>
+        Why do you want to report<br>
+        <span style="color: #ecb550;">{{ restaurant.name }}</span>
+      </h1>
+      <textarea name="text"
+                placeholder="Enter your reason..."
+                required></textarea><br>
+      <input type="submit" value="REPORT">
+    </form>
+  </div>
+
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-icon">✔️</div>
+      <h2 style="color: #ecb550;">Thank You!</h2>
+      <p>Your report has been sent.</p>
+    </div>
+  </div>
+  
+
+  <!-- Inline JS (can be moved to static .js later) -->
+  <script>
+    function handleReportSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const modal = document.getElementById("reportModal");
+
+      fetch("", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: new FormData(form)
+      })
+      .then(response => {
+        if (response.ok) {
+          // Show the modal
+          modal.classList.add("show");
+    setTimeout(() => window.location.href = "{% url 'user_home' %}", 3000);
+
+        } else {
+          alert("Failed to submit. Try again.");
+        }
+      })
+      .catch(() => {
+        alert("Something went wrong.");
+      });
+
+      return false;
+    }
+    function closeModal() {
+  document.getElementById("reportModal").classList.remove("show");
+}
+
+  </script>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'admin-account-view/admin_header.html' %}
+{% block content %}
+{% load static %}
+
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                            <span class="ml-1">Datatable</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% static 'admin/javascript:void(0)' %}">Table</a></li>
+                            <li class="breadcrumb-item active"><a href="{% static 'admin/javascript:void(0)' %}">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Pending Restaurants</h4>
+                            </div>
+                            <div class="card-body">
+                                <div style="color: black;" class="table-responsive">
+                                    <table id="example" class="display" style="min-width: 845px">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>District</th>
+                                                <th>City</th>
+                                                <th>Contact</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in a %}
+                                            <tr>
+                                                <td> {{ data.name }}</td>
+                                                <td> {{ data.district }}</td>
+                                                <td> {{ data.city }}</td>
+                                                <td> {{ data.contact }}</td>
+                                                <td> <button class="btn btn-success"> <a href="{% url 'admin_approve_restaurant' data.id %}" style="color: white;">Unfreeze</a></button></td>
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+       {% endblock %}

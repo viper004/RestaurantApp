@@ -1,0 +1,31 @@
+
+{% extends 'user_header.html' %}
+{% block content %}
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head> -->
+<body>
+    <center>
+        {% for a in staffs %}
+
+        <div class="card" style="width: 18rem;height: auto;">
+            <!-- <img src= "/media/{{a.image}}" class="card-img-top" alt="image-not-found" > -->
+            <div class="card-body">
+            <h5 class="card-title" style="color: black;">{{a.name}}</h5>
+            <p class="card-text" style="color: black;">{{a.contact}}</p>
+            <p class="card-text" style="color: black;">{{a.email}}</p>
+            <p class="card-text" style="color: black;">{{a.gender}}</p>
+            <a href="phoneto:{{a.contact}}" class="btn btn-primary">Contact</a>
+            </div>
+        </div>
+        <hr>
+
+        {% endfor %}
+    </center>
+</body>
+</html>
+{% endblock %}

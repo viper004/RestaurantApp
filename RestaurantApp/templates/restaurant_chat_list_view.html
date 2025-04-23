@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat List- Restaurants</title>
+</head>
+<body>
+    <center>
+        <table>
+            <tr>
+                <th>Customers</th>
+            </tr>
+            {% for a in res %}
+<tr>
+    <td>
+        <a href="{% url 'restaurant_user_chat' a.1 %}">{{ a.0 }}</a>
+    </td>
+</tr>
+{% endfor %}
+
+        </table>
+    </center>
+</body>
+</html>

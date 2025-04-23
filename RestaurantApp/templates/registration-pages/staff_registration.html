@@ -1,0 +1,153 @@
+<html>
+<head>
+    <title>Staff Registration</title>
+</head>
+<body>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        margin: 0;
+        background-image: url('static/bg.jpg') !important;
+        background-size: cover;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.612);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        width: 500px;
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+        position: relative;
+    }
+
+    .back-home {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #000;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        text-decoration: none;
+    }
+
+    .back-home:hover {
+        background: #ffffff;
+        color: black;
+    }
+
+    h2 {
+        color: rgb(0, 0, 0);
+        font-size: 30px;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .input-group label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: black;
+        text-align: left;
+        display: block;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        background: rgb(255, 255, 255);
+        transition: 0.3s;
+    }
+
+    input::placeholder {
+        color: rgba(126, 117, 117, 0.7);
+    }
+
+    input:hover, select:hover, textarea:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    input:focus, select:focus, textarea:focus {
+        background: rgba(58, 0, 0, 0.4);
+    }
+
+    .btn {
+        background: #000000;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .btn:hover {
+        background: #ffffff;
+        color: black;
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="container">
+    <a href="/" class="back-home">Back Home</a>
+    <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <h2>Staff Registration</h2>
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="input-group">
+                {{ form.as_p }}
+            </div>
+            <div class="input-group">
+                {{ login.as_p }}
+            </div>
+        </div>
+        <button type="submit" class="btn">REGISTER</button>
+    </form>
+</div>
+
+<script>
+    function validateForm() {
+        let inputs = document.querySelectorAll("input");
+        for (let input of inputs) {
+            if (input.value.trim() === "") {
+                alert("Please fill out all fields.");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+</body>
+
+</html>

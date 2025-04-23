@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders-GoHotel</title>
+</head>
+<body>
+    <center>
+        <h2>Orders</h2>
+        <table border="1px" style="border-collapse: collapse; width: 80%;">
+            <tr style="height: 50px;">
+                <th style="padding: 15px;">Item</th>
+                <th style="padding: 15px;">Customer</th>
+                <th style="padding: 15px;">Contact</th>
+                <th style="padding: 15px;">Order Date</th>
+                <th style="padding: 15px;">Order Time</th>
+                <th style="padding: 15px;">Payment Status</th>
+            </tr>
+            {% for a in details %}
+            <tr style="height: 50px;">
+                <td style="padding: 15px;">{{a.product_id.dish_name}}</td>
+                <td style="padding: 15px;">{{a.user_id.login_id.name}}</td>
+                <td style="padding: 15px;">{{a.user_id.users.contact}}</td>
+                <td style="padding: 15px;">{{a.current_date}}</td>
+                <td style="padding: 15px;">{{a.current_time}}</td>
+                <td style="padding: 15px;">
+                    {% if a.payment_method == 1 %}
+                    Card Payment
+                    {% elif a.payment_method == 2 %}
+                        UPI Payment
+                    {% else %}
+                        Pickup
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </center>
+    
+</body>
+</html>

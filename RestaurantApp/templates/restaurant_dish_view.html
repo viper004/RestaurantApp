@@ -1,0 +1,31 @@
+{% extends 'index_header.html' %}
+{% block content %}
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head> -->
+<body>
+    <h2 style="text-align: center;"><u>DISHES AVAILABLE</u></h2><br>
+    <form method="POST">
+        {% csrf_token %}
+        {% for a in dishes %}
+        <div class="card" style="display: flex; flex-wrap: wrap; justify-content: center;background-color: transparent;">
+            <center>
+            <img src="{{ a.image.url }}" alt="food_image_not_found" height="250px" width="400px">
+            <div class="container">
+                <h4 style="color:rgb(255, 255, 255);"><b>{{ a.dish_name }}</b></h4> 
+                <p style="color:rgb(255, 255, 255);">₹{{ a.price }}/-</p>  
+                <!-- <p style="color:rgb(255, 255, 255);">₹{{ a. }}/-</p>  -->
+            </div>
+            </center>
+        </div>
+        <hr color="white">
+        {% endfor %}
+
+    </form>
+</body>
+<!-- </html> -->
+{% endblock %}

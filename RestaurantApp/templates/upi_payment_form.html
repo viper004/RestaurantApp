@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            background: white;
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        #timer {
+            font-size: 2em;
+            font-weight: bold;
+            color: red;
+        }
+        img {
+            width: 200px;
+            height: 200px;
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete payment in:</h1>
+        <p id="timer">3:00</p>
+        <img src="/static/upi_qr.jpg" alt="UPI QR Code">
+        <h2>OR</h2>
+        <form method="POST">
+            {% csrf_token %}
+        <label for="upi_id">Enter your UPI ID:</label>
+        <input type="text" id="upi_id" name="upi_id">
+        <br><br>
+        <a href="">
+        <input type="submit" value="REQUEST">
+        </a>
+        </form>
+    </div>
+
+    <script>
+        function startTimer(durationInSeconds, display) {
+            let timer = durationInSeconds;
+            let minutes, seconds;
+
+            let interval = setInterval(function () {
+                minutes = Math.floor(timer / 60);
+                seconds = timer % 60;
+
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "Time's Up!";
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            let duration = 3 * 60; // 3 minutes in seconds
+            let display = document.getElementById("timer");
+            startTimer(duration, display);
+        };
+    </script>
+</body>
+</html>

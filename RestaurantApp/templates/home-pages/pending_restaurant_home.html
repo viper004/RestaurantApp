@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freezed Restaurant - Home</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url(static/bg.jpg);
+      background-position: center;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .freeze-message {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .freeze-message h3 {
+      color: #d9363e;
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .freeze-message h2 {
+      color: #333;
+      margin: 8px 0;
+    }
+
+    .freeze-message a {
+      color: #ecb550;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .freeze-message a:hover {
+      color: #d9363e;
+      text-decoration: underline;
+    }
+
+    .go-back-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #ecb550;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .go-back-btn:hover {
+      background-color: #d9363e;
+    }
+  </style>
+</head>
+<body>
+  <div class="freeze-message">
+    <h3>Your Restaurant Registration is processing. Please wait untill you get a confirmation mail.</h3>
+    <h2> For more details contact</h2>
+    <h2><a href="mailto:admins@gohotel.com">admin@gohotel.com</a></h2>
+    <button class="go-back-btn" onclick="history.back()">Go Back</button>
+  </div>
+</body>
+</html>

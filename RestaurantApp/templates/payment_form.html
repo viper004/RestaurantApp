@@ -1,0 +1,152 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Credit Card Payment Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'payment/bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'payment/font-awesome/css/font-awesome.min.css' %}" />
+
+    <script type="text/javascript" src="{% static 'payment/js/jquery-1.10.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'payment/bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="page-header"></div>
+
+    <!-- Credit Card Payment Form - START -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <h3 class="text-center">Payment Details</h3>
+                            <img class="img-responsive cc-img" src="http://www.prepbootstrap.com/Content/images/shared/misc/creditcardicons.png">
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form id ="payment-form" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>CARD NUMBER</label>
+                                        <div class="input-group">
+                                            <input name="card_number" type="number" class="form-control" placeholder="Valid Card Number" required/>
+                                            <span class="input-group-addon"><span class="fa fa-credit-card"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7 col-md-7">
+                                    <div class="form-group">
+                                        <label>EXPIRATION MONTH</label>
+                                        <input name="expiry_month" type="number" class="form-control" placeholder="MM" required/>
+                                    </div>
+                                </div>
+                                <div class="col-xs-7 col-md-7">
+                                    <div class="form-group">
+                                        <label>EXPIRATION YEAR</label>
+                                        <input name="expiry_year" type="number" class="form-control" placeholder="YYYY" required />
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-md-5 pull-right">
+                                    <div class="form-group">
+                                        <label>CV CODE</label>
+                                        <input name="cvv_code" type="number" class="form-control" placeholder="CVC" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label>CARD OWNER</label>
+                                        <input name="owner_name" type="text" class="form-control" placeholder="Card Holder's Name" required/>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-warning btn-lg btn-block">Process payment</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Payment Successful</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Your payment was successful. Thank you!</p>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .cc-img {
+            margin: 0 auto;
+        }
+    </style>
+
+</div>
+
+<!-- JavaScript for Handling the Payment Submission -->
+<script>
+    window.onload=alert("You are doing payment. Please enter valid card details")
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("payment-form");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const formData = new FormData(form); // Collect form data
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest" // Helps Django recognize it as an AJAX request
+            }
+        })
+        .then(response => response.json())  // Expect a JSON response from the backend
+        .then(data => {
+            if (data.success) {  
+                $("#successModal").modal("show");  // Show success modal
+
+                // Redirect after 2 seconds
+                setTimeout(function () {
+                    window.location.href = "{% url 'user_cart_view' %}";
+                }, 2000);
+            } else {
+                alert("Payment failed! Please try again.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+});
+
+</script>
+
+
+</body>
+</html>

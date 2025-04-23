@@ -1,0 +1,84 @@
+{% extends 'user_header.html' %}
+{% block content %}
+
+<div class="review-container">
+    {% if reviews %}
+        <h2>Reviews for <span style="color:#ecb550;">{{ restaurant.name }}</span></h2>
+
+        <div class="reviews">
+            {% for review in reviews %}
+                <div class="review-card">
+                    <p><strong>{{ review.user_id.name }}</strong> – {{ review.current_date|date:"M d, Y" }}</p>
+                    
+                    <!-- Star rating display -->
+                    <p class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.star %}
+                                <span class="star filled">&#9733;</span>
+                            {% else %}
+                                <span class="star">&#9733;</span>
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+
+                    <p>{{ review.review }}</p>
+                    
+                    {% if review.images %}
+                        <img src="{{ review.images.url }}" alt="Review Image" class="review-image">
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No reviews yet for this restaurant.</p>
+    {% endif %}
+</div>
+
+<style>
+  .review-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: rgb(0, 0, 0);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .review-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ecb550;
+  }
+
+  .review-card {
+    border: 1px solid #eee;
+    border-left: 5px solid #ecb550;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #000000;
+    color: white;
+  }
+
+  .review-card p {
+    margin: 5px 0;
+  }
+
+  .star {
+    font-size: 18px;
+    color: #e4e5e9; /* light gray */
+  }
+
+  .star.filled {
+    color: #ffc107; /* yellow/gold */
+  }
+
+  .review-image {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+</style>
+
+{% endblock %}
