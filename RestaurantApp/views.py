@@ -707,9 +707,6 @@ def logout_view(request):
     request.session.clear()
     return redirect('login')
 
-def hi(request):
-    return "hi"
-
 # from django.views.decorators.csrf import csrf_exempt
 import json
 # @csrf_exempt  # Only use this if you can't include CSRF token properly, otherwise remove it
