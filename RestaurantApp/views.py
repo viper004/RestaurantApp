@@ -727,3 +727,28 @@ def update_cart_quantities(request):
         return JsonResponse({'status': 'success'})
 
     return JsonResponse({'status': 'invalid'}, status=400)
+
+def restaurant_document_upload(request):
+    return render(request,'restaurant_document_upload.html')
+
+def announcements(request):
+    if request.method=='POST':
+        subject=request.POST.get('subject')
+        message=request.POST.get('message')
+        Announcements.objects.create(
+            subject=subject,
+            message=message
+        )
+    return render(request,"dept_announcement.html")
+
+def view_announcements(request):
+    announcements=Announcements.objects.all().order_by('-current_date', '-current_time')
+    return render(request,'view_announcements.html',{'announcements':announcements})
+
+def restaurant_view_announcement(request):
+    announcements=Announcements.objects.all().order_by('-current_date', '-current_time')
+    return render(request,'restaurant_view_announcement.html',{'announcements':announcements})
+
+def certificate_application(request):
+    return render(request,'certificate_application.html')
+    

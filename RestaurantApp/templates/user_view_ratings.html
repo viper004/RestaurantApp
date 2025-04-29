@@ -24,7 +24,7 @@
                     <p>{{ review.review }}</p>
                     
                     {% if review.images %}
-                        <img src="{{ review.images.url }}" alt="Review Image" class="review-image">
+                        <img src="{{ review.images.url }}" alt="Review Image" class="review-image" width="150px" height="200px">
                     {% endif %}
                 </div>
             {% endfor %}

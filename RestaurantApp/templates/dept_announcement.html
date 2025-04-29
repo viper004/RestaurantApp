@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Announcement</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        margin: 0;
+        background-image: url('static/bg.jpg') !important;
+        background-size: cover;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.612);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        width: 500px;
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+        position: relative;
+    }
+
+    .back-home {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #000;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        text-decoration: none;
+    }
+
+    .back-home:hover {
+        background: #ffffff;
+        color: black;
+    }
+
+    h2 {
+        color: rgb(0, 0, 0);
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    .input-group label {
+        font-weight: 600;
+        color: black;
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: rgb(255, 255, 255);
+        outline: none;
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    input[type="text"]:hover,
+    textarea:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn {
+        background: #000000;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .btn:hover {
+        background: #ffffff;
+        color: black;
+        transform: scale(1.05);
+    }
+
+    .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.modal-content button {
+    margin-top: 15px;
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #444;
+}
+
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="container">
+    <a href="/" class="back-home">Back Home</a>
+    <form method="POST" onsubmit="return validateAnnouncementForm(event)">
+        <h2>Send Announcement</h2>
+        {% csrf_token %}
+        <div class="input-group" >
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="Enter subject..." required style="height: 40px;">
+
+        </div>
+
+        <div class="input-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Enter your announcement..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn">SEND</button>
+    </form>
+</div>
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <p>📢 Broadcast Message Sent!</p>
+    </div>
+</div>
+
+<script>
+    function validateAnnouncementForm(event) {
+        event.preventDefault();
+
+        const subject = document.getElementById("subject").value.trim();
+        const message = document.getElementById("message").value.trim();
+
+        if (!subject || !message) {
+            alert("Please fill out both subject and message.");
+            return false;
+        }
+
+        // Show modal
+        document.getElementById("successModal").style.display = "flex";
+
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = "/department_home"; // ← change to your target URL
+        }, 2000);
+
+        return false;
+    }
+
+    function closeModal() {
+        document.getElementById("successModal").style.display = "none";
+    }
+</script>
+
+
+</body>
+</html>

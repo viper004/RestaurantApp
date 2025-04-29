@@ -12,6 +12,7 @@ urlpatterns = [
     path('user_home',views.user_home,name='user_home'),
     path('user_profile_edit',views.user_profile,name='user_profile_edit'),
     path('restaurant_registration',views.restaurant_registration, name='restaurant_registration'),
+    path('restaurant_document_upload',views.restaurant_document_upload,name='restaurant_document_upload'),
     path('staff_registration',views.staff_registration,name='staff_registration'),
     path('food_and_safety_registration',views.food_and_safety_department_registration, name='food_and_safety_registration'),
     path('admin_restaurant_view',views.admin_restaurant_view,name='admin_restaurant_view'),
@@ -67,7 +68,12 @@ urlpatterns = [
     path('admin_freeze_restaurant/<int:id>',views.admin_freeze_restaurant,name='admin_freeze_restaurant'),
     path('user_report_restaurant/<int:id>',views.user_report_restaurant,name='user_report_restaurant'),
     path('admin_view_user_report',views.admin_view_user_report,name='admin_view_user_report'),
-        path('update_cart_quantities/', views.update_cart_quantities, name='update_cart_quantities'),
+    path('update_cart_quantities/', views.update_cart_quantities, name='update_cart_quantities'),
+    path('announcements',views.announcements,name='announcements'),
+    path('view_announcements',views.view_announcements,name='view_announcements'),
+    path('restaurant_view_announcement',views.restaurant_view_announcement,name='restaurant_view_announcement'),
+    path('certificate_application',views.certificate_application,name='certificate_application')
+        
 
 
 ]+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

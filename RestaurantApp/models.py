@@ -121,3 +121,9 @@ class UserReports(models.Model):
      user_id=models.ForeignKey('Users',on_delete=models.CASCADE)
      restuarant_id=models.ForeignKey('Restaurants',on_delete=models.CASCADE)
      text=models.CharField(max_length=500)
+
+class Announcements(models.Model):
+     subject=models.CharField(max_length=200)
+     message=models.TextField()
+     current_date=models.DateField(auto_now_add=True)
+     current_time=models.TimeField(auto_now_add=True)

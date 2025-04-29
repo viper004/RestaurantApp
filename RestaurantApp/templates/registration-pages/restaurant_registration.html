@@ -122,7 +122,7 @@
     
     <div class="container">
         <a href="/" class="back-home">Back Home</a>
-        <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm(event)">
             <h2>Restaurant Registration</h2>
             {% csrf_token %}
             <div class="form-group">
@@ -133,12 +133,14 @@
                     {{ login.as_p }}
                 </div>
             </div>
-            <button type="submit" class="btn">REGISTER</button>
+            <button type="submit" class="btn">NEXT</button>
         </form>
     </div>
     
     <script>
-        function validateForm() {
+        function validateForm(event) {
+            event.preventDefault(); // Prevent default form submission
+    
             let inputs = document.querySelectorAll("input");
             for (let input of inputs) {
                 if (input.value.trim() === "") {
@@ -146,8 +148,12 @@
                     return false;
                 }
             }
-            return true;
+    
+            // If validation passes, redirect
+            window.location.href = "/restaurant_document_upload"; // or use URL name via Django template if needed
+            return false; // Prevent default submit behavior
         }
     </script>
+    
 </body>
 </html>
