@@ -56,11 +56,15 @@ def login_action(request):
                     return redirect('user_home')
                 elif user.usertype==2:
                     resstaurant=get_object_or_404(Restaurants,login_id=user.id)
+                    request.session['restaurant_id']=user.id
+                    if resstaurant.have_certificate==0:
+                        return render(request,'no_certificate.html',{'data':resstaurant})
+                    if resstaurant.department_approved==0:
+                        return render(request,'home-pages/pending_restaurant_home.html')
                     if resstaurant.approval_status==0:
                         return render(request,'home-pages/pending_restaurant_home.html')
                     if resstaurant.approval_status==2:
                         return render(request,'home-pages/freezed_Restaurant_home.html')
-                    request.session['restaurant_id']=user.id
                     
                     # if user.id.approval_status==2:
                     #     return render(request,'freezed_Restaurant_home.html')
@@ -115,21 +119,52 @@ def user_profile(request):
     return render(request,'user_profile_edit.html',{'form':form,'form2':form2})
 
 def restaurant_profile(request):
-    restaurant_id=request.session.get('restaurant_id')
-    login_details=get_object_or_404(Login,id=restaurant_id)
-    data=get_object_or_404(Restaurants,login_id=restaurant_id)
-    if request.method=='POST':
-        form=edit_user(request.POST,instance=data)
+    restaurant_id = request.session.get('restaurant_id')
+    login_details = get_object_or_404(Login, id=restaurant_id)
+    data = get_object_or_404(Restaurants, login_id=restaurant_id)
+
+    if request.method == 'POST':
+        form=restaurant_form(request.POST,instance=data)
         form2=login_form(request.POST,instance=login_details)
         if form.is_valid() and form2.is_valid():
-            form.save()
-            form2.save()
-            return redirect('restaurant_home')
-    else:
-        form=edit_user(instance=data)
-        form2=login_form(instance=login_details)
-    return render(request,'restaurant_profile_edit.html',{'form':form,'form2':form2})
 
+        # update fields manually
+        # data.category = request.POST.get('category')
+        # data.name = request.POST.get('name')
+        # data.address = request.POST.get('address')
+        # data.district = request.POST.get('district')
+        # data.city = request.POST.get('city')
+        # data.contact = request.POST.get('contact')
+            data.have_certificate = int(request.POST.get('have_certificate'))
+            print (data.have_certificate)
+            data.fssai_nunmber = request.POST.get('fssai_nunmber')
+            print (data.fssai_nunmber)
+            data.save()
+
+        # login_details.username = request.POST.get('username')
+        # login_details.email = request.POST.get('email')
+        # login_details.save()
+        return redirect('restaurant_home')
+    else:
+        form=restaurant_form(instance=data)
+        form2=login_form(instance=login_details)
+    
+    return render(request, 'restaurant_profile_edit.html', {
+        'data': data,
+        'login_details': login_details,
+        'form':form,
+        'form2':form2
+    })
+
+def restaurant_profile_update(request,id):
+    restaurant=Restaurants.objects.get(id=id)
+
+    return redirect('restaurant_profile')
+
+def have_certificate_yes(request,id):
+    restaurant=get_object_or_404(Restaurants,id=id)
+    restaurant.have_certificate=1
+    restaurant.save()
 
 def restaurant_registration(request):
     if request.method=='POST':
@@ -144,6 +179,12 @@ def restaurant_registration(request):
             b.save()
             messages.success(request,"Form successfully submitted")
             return redirect('index')
+            have_certificate=request.POST.get('have_certificate')
+            fssai_license=request.POST.get('fssai_license')
+            Restaurants.objects.create(
+                have_certificate=have_certificate,
+                fssai_license=fssai_license
+            )
     else:
             form=restaurant_form()
             login=login_form()
@@ -205,7 +246,7 @@ def food_and_safety_department_registration(request):
     return render(request,'registration-pages/food_and_safety_registration.html',{'form':form,'login':login})
 
 def admin_view_pending_restaurant(request):
-    data=Restaurants.objects.filter(approval_status=0)
+    data=Restaurants.objects.filter(approval_status = 0 , department_approved = 1)
     return render(request,'admin-account-view/admin_view_pending_restaurant.html',{'a':data})
 
 def admin_approve_restaurant(request,id):
@@ -750,5 +791,57 @@ def restaurant_view_announcement(request):
     return render(request,'restaurant_view_announcement.html',{'announcements':announcements})
 
 def certificate_application(request):
+    if request.method=='POST':
+        res=request.session.get('restaurant_id')
+        restaurant=get_object_or_404(Restaurants,login_id=res)
+        name=request.POST.get('restaurant_name')
+        owner_name=request.POST.get('owner_name')
+        address=request.POST.get('address')
+        pincode=request.POST.get('pincode')
+        district=request.POST.get('district')
+        validity=request.POST.get('validity')
+        mobile=request.POST.get('mobile')
+        tel=request.POST.get('telephone')
+        email=request.POST.get('email')
+        a=Certificate_Application.objects.create(
+            res_id=restaurant,
+            name=name,
+            address=address,
+            district=district,
+            validity=validity,
+            mobile=mobile,
+            tel=tel,
+            email=email 
+        )
+        print (a)
+        return JsonResponse({'success': True})
     return render(request,'certificate_application.html')
+    
+def view_certificate_applications(request):
+    applications=Certificate_Application.objects.all().order_by('current_date')
+    return render(request,'view_certificate_applications.html',{'applications':applications})
+
+def department_view_pending_restaurant(request):
+    res=Restaurants.objects.filter(department_approved='0')
+    return render(request,'department_view_pending_restaurant.html',{'data':res})
+
+def department_approve(request,id):
+    res=Restaurants.objects.get(id=id)
+    res.department_approved=1
+    res.save()
+    return redirect('department_view_pending_restaurant')
+
+def department_delete(request,id):
+    res=Restaurants.objects.filter(id=id)
+    res.delete()
+    return redirect('department_view_pending_restaurant')
+
+def view_full_application(request,id):
+    application=Certificate_Application.objects.get(id=id)
+    return render(request,'view_full_application.html',{'application':application})
+
+def delete_application(request,id):
+    application=Certificate_Application.objects.get(id=id)
+    application.delete()
+    return redirect('view_certificate_applications')
     

@@ -1,0 +1,77 @@
+{% extends 'home-pages/department_header.html' %}
+{% block content %}
+{% load static %}
+
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                            <span class="ml-1">Datatable</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% static 'admin/javascript:void(0)' %}">Table</a></li>
+                            <li class="breadcrumb-item active"><a href="{% static 'admin/javascript:void(0)' %}">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Pending Restaurants</h4>
+                            </div>
+                            <div class="card-body">
+                                <div style="color: black;" class="table-responsive">
+                                    <table id="example" class="display" style="min-width: 845px">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>District</th>
+                                                <th>City</th>
+                                                <th>Contact</th>
+                                                <th>Had License</th>
+                                                <th>License Number</th>
+                                                <th>Approve</th>
+                                                <th>Reject</th>
+                                            </tr>
+                                            {% for a in data %}
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td> {{ a.name }}</td>
+                                                <td> {{ a.district }}</td>
+                                                <td> {{ a.city }}</td>
+                                                <td> {{ a.contact }}</td>
+                                                {% if a.have_certificate == 0 %}
+                                                <td>No</td>
+                                                {% else %}
+                                                <td>Yes</td>
+                                                {% endif %}
+                                                <td>{{a.fssai_nunmber}}</td>
+                                                <td> <button class="btn btn-success"> <a href="{% url 'department_approve' a.id %}" style="color: white;">Approve</a></button></td>
+                                                <td><button class="btn btn-danger"><a href="{% url 'department_delete' a.id %}" style="color: white;">Delete</a></button></td>
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {% endblock %}

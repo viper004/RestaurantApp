@@ -13,18 +13,21 @@ class Login(models.Model):
         usertype=models.IntegerField(default=0)
 
 class Restaurants(models.Model):
-        category=models.CharField(max_length=100)
-        name=models.CharField(max_length=100)
-        image=models.FileField(upload_to='image/')
-        address=models.CharField(max_length=500)
-        district=models.CharField(max_length=50)
-        city=models.CharField(max_length=100)
-        contact=models.CharField(max_length=100)
-        approval_status=models.IntegerField(default=0,null=False)#1-pending, 2-approved, 3-freezed
-        login_id=models.ForeignKey('Login',on_delete=models.CASCADE)
-        def __str__(self):
-            return self.name
-        
+    category = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    image = models.FileField(upload_to='image/')
+    address = models.CharField(max_length=500)
+    district = models.CharField(max_length=50)
+    city = models.CharField(max_length=100)
+    contact = models.CharField(max_length=100)
+    approval_status = models.IntegerField(default=0)
+    login_id = models.ForeignKey('Login', on_delete=models.CASCADE)
+    have_certificate = models.IntegerField(default=0)  # No choices here
+    fssai_nunmber = models.CharField(null=True, max_length=10)
+    department_approved=models.IntegerField(null=False,default=0)#0-not approved and 1- approved
+    def __str__(self):
+        return self.name
+
         
 
 class Staffs(models.Model):
@@ -127,3 +130,16 @@ class Announcements(models.Model):
      message=models.TextField()
      current_date=models.DateField(auto_now_add=True)
      current_time=models.TimeField(auto_now_add=True)
+
+class Certificate_Application(models.Model):
+     res_id=models.ForeignKey('Restaurants',on_delete=models.CASCADE)
+     name=models.CharField(max_length=200)
+     owner_name=models.CharField(max_length=100,null=True)
+     address=models.TextField()
+     district=models.CharField(max_length=100)
+     pincode=models.IntegerField(default=000000)
+     validity=models.IntegerField(default=1)
+     mobile=models.IntegerField(null=False)
+     tel=models.IntegerField(null=False)
+     email=models.EmailField()
+     current_date=models.DateField(auto_now_add=True)

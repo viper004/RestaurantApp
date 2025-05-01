@@ -4,162 +4,142 @@
     <meta charset="UTF-8">
     <title>Send Announcement</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+            background-color: #f0f4f8;
+            /* background-image: url('static/bg.jpg'); */
+            background-size: cover;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            padding: 80px 20px 20px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px; /* changed from right: 20px */
+            background: #ffffff;
+            color: rgb(0, 132, 255);
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.3s ease-in-out;
+        }
+
+
+        .back-home:hover {
+            /* background: #1565c0; */
+            text-decoration: underline;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            resize: vertical;
+            transition: background 0.3s ease;
+        }
+
+        input[type="text"]:hover,
+        textarea:hover {
+            background-color: #f9fbfd;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #1e88e5;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #1565c0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            color: #2c3e50;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
 
-<style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        height: 100vh;
-        display: grid;
-        place-items: center;
-        margin: 0;
-        background-image: url('static/bg.jpg') !important;
-        background-size: cover;
-    }
-
-    .container {
-        background: rgba(255, 255, 255, 0.612);
-        backdrop-filter: blur(10px);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-        width: 500px;
-        text-align: center;
-        animation: fadeIn 1s ease-in-out;
-        position: relative;
-    }
-
-    .back-home {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #000;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: 0.3s ease-in-out;
-        text-decoration: none;
-    }
-
-    .back-home:hover {
-        background: #ffffff;
-        color: black;
-    }
-
-    h2 {
-        color: rgb(0, 0, 0);
-        font-size: 28px;
-        margin-bottom: 20px;
-    }
-
-    .input-group {
-        margin-bottom: 15px;
-        text-align: left;
-    }
-
-    .input-group label {
-        font-weight: 600;
-        color: black;
-        display: block;
-        margin-bottom: 5px;
-    }
-    input[type="text"],
-    textarea {
-        width: 100%;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        background: rgb(255, 255, 255);
-        outline: none;
-        resize: vertical;
-        min-height: 100px;
-    }
-
-    input[type="text"]:hover,
-    textarea:hover {
-        background: rgba(255, 255, 255, 0.3);
-    }
-
-    .btn {
-        background: #000000;
-        color: white;
-        padding: 12px;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: 0.3s ease-in-out;
-        width: 100%;
-        margin-top: 15px;
-    }
-
-    .btn:hover {
-        background: #ffffff;
-        color: black;
-        transform: scale(1.05);
-    }
-
-    .modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1000; 
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: #fff;
-    padding: 30px 20px;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 18px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.modal-content button {
-    margin-top: 15px;
-    background-color: #000;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.modal-content button:hover {
-    background-color: #444;
-}
-
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
-
 <div class="container">
-    <a href="/" class="back-home">Back Home</a>
+    <a href="javascript:history.back()" class="back-home">← Back Home</a>
     <form method="POST" onsubmit="return validateAnnouncementForm(event)">
         <h2>Send Announcement</h2>
         {% csrf_token %}
-        <div class="input-group" >
+        <div class="input-group">
             <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" placeholder="Enter subject..." required style="height: 40px;">
-
+            <input type="text" id="subject" name="subject" placeholder="Enter subject..." required>
         </div>
 
         <div class="input-group">
@@ -170,7 +150,8 @@
         <button type="submit" class="btn">SEND</button>
     </form>
 </div>
-<!-- Success Modal -->
+
+<!-- Modal -->
 <div id="successModal" class="modal">
     <div class="modal-content">
         <p>📢 Broadcast Message Sent!</p>
@@ -189,22 +170,15 @@
             return false;
         }
 
-        // Show modal
         document.getElementById("successModal").style.display = "flex";
 
-        // Redirect after 3 seconds
         setTimeout(() => {
-            window.location.href = "/department_home"; // ← change to your target URL
+            event.target.submit(); // Actually submit the form to the backend
         }, 2000);
 
         return false;
     }
-
-    function closeModal() {
-        document.getElementById("successModal").style.display = "none";
-    }
 </script>
-
 
 </body>
 </html>

@@ -25,6 +25,31 @@ class restaurant_form(forms.ModelForm):
         model=Restaurants
         fields=['category','name','image','address','district','city','contact']
 
+
+
+class certificate_form(forms.ModelForm):
+    HAVE_CERTIFICATE_CHOICES = [
+        (0, 'Yes'),
+        (1, 'No'),
+    ]
+
+    have_certificate = forms.ChoiceField(
+        choices=HAVE_CERTIFICATE_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    class Meta:
+        model = Restaurants
+        fields = ['have_certificate', 'fssai_nunmber']
+        widgets = {
+            'fssai_nunmber': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter FSSAI License Number'
+            })
+        }
+
 class staff_form(forms.ModelForm):
     restaurant_name = forms.ModelChoiceField(
         queryset=Restaurants.objects.all(),

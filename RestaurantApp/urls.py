@@ -72,8 +72,14 @@ urlpatterns = [
     path('announcements',views.announcements,name='announcements'),
     path('view_announcements',views.view_announcements,name='view_announcements'),
     path('restaurant_view_announcement',views.restaurant_view_announcement,name='restaurant_view_announcement'),
-    path('certificate_application',views.certificate_application,name='certificate_application')
-        
+    path('certificate_application',views.certificate_application,name='certificate_application'),
+    path('view_certificate_applications',views.view_certificate_applications,name='view_certificate_applications'),
+    path('restaurant_profile_update/<int:id>',views.restaurant_profile_update,name='restaurant_profile_update'),
+    path('department_view_pending_restaurant',views.department_view_pending_restaurant,name='department_view_pending_restaurant'),
+    path('department_approve/<int:id>',views.department_approve,name='department_approve'),
+    path('department_delete/<int:id>',views.department_delete,name='department_delete'),
+    path('view_full_application/<int:id>',views.view_full_application,name='view_full_application'),
+    path('delete_application/<int:id>',views.delete_application,name='delete_application')
 
 
 ]+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

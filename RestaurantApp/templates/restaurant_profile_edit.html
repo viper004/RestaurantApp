@@ -1,5 +1,6 @@
-{% extends 'home-pages/restaurant_header.html' %}
-{% block content %}
+<html>
+    <head>
+        <title> Edit Details- Restaurant</title>
 <style>
     body {
         font-family: 'Poppins', sans-serif;
@@ -68,6 +69,8 @@
     }
 }
 </style>
+    </head>
+<body>
 
 
 <div class="form-container">
@@ -75,7 +78,22 @@
         {% csrf_token %}
         {{ form.as_p }}
         {{ form2.as_p }}
+        <p>
+            <label for="have_certificate">Do you have a certificate?</label>
+            <select name="have_certificate" id="have_certificate">
+                <option value="1" {% if data.have_certificate == 1 %}selected{% endif %}>Yes</option>
+                <option value="0" {% if data.have_certificate == 0 %}selected{% endif %}>No</option>
+            </select>
+        </p>
+        
+        <p>
+            <label for="fssai_nunmber">FSSAI Number</label>
+            <input type="text" name="fssai_nunmber" id="fssai_nunmber" value="{{ data.fssai_nunmber }}">
+        </p>
+        
+        
         <input type="submit" value="EDIT">
     </form>
 </div>
-{% endblock %}
+</body>
+</html>

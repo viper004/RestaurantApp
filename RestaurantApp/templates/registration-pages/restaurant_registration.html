@@ -132,28 +132,63 @@
                 <div class="input-group">
                     {{ login.as_p }}
                 </div>
+                <div class="input-group">
+                    <label for="fssai_yes_no">Have FSSAI license?</label>
+                    <select id="fssai_yes_no" onchange="toggleFssaiField()" required name="have_certificate">
+                        <option value="">-- Select --</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div> 
+                
+                <div class="input-group" id="fssai_field" style="display: none;">
+                    <label for="fssai_license">FSSAI License Number</label>
+                    <input type="text" id="fssai_license" name="fssai_license" placeholder="Enter FSSAI License Number">
+                </div>
+                
             </div>
             <button type="submit" class="btn">NEXT</button>
         </form>
     </div>
     
     <script>
-        function validateForm(event) {
-            event.preventDefault(); // Prevent default form submission
+        // Show/hide the FSSAI field based on selection
+        function toggleFssaiField() {
+            const fssaiSelect = document.getElementById("fssai_yes_no");
+            const fssaiField = document.getElementById("fssai_field");
     
-            let inputs = document.querySelectorAll("input");
+            if (fssaiSelect.value === "yes") {
+                fssaiField.style.display = "block";
+            } else {
+                fssaiField.style.display = "none";
+                document.getElementById("fssai_license").value = "";
+            }
+        }
+    
+        // Attach event listener on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("fssai_yes_no").addEventListener("change", toggleFssaiField);
+            toggleFssaiField(); // Run once on page load to handle pre-filled form
+        });
+    
+        // Optional: Basic validation before submission
+        function validateForm(event) {
+            const inputs = document.querySelectorAll("input, select");
             for (let input of inputs) {
-                if (input.value.trim() === "") {
-                    alert("Please fill out all fields.");
+                if (input.type !== "submit" && input.offsetParent !== null && input.value.trim() === "") {
+                    alert("Please fill out all visible fields.");
+                    event.preventDefault();
                     return false;
                 }
             }
     
-            // If validation passes, redirect
-            window.location.href = "/restaurant_document_upload"; // or use URL name via Django template if needed
-            return false; // Prevent default submit behavior
+            // Redirect manually if needed, or remove this for Django to handle
+            // window.location.href = "/restaurant_document_upload";
+            return true;
         }
     </script>
+    
+    
     
 </body>
 </html>

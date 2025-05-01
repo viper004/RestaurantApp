@@ -1,31 +1,80 @@
-{% extends 'index_header.html' %}
+{% extends 'home-pages/restaurant_header.html' %}
 {% block content %}
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head> -->
-<body>
-    <h2 style="text-align: center;"><u>DISHES AVAILABLE</u></h2><br>
-    <form method="POST">
-        {% csrf_token %}
-        {% for a in dishes %}
-        <div class="card" style="display: flex; flex-wrap: wrap; justify-content: center;background-color: transparent;">
-            <center>
-            <img src="{{ a.image.url }}" alt="food_image_not_found" height="250px" width="400px">
-            <div class="container">
-                <h4 style="color:rgb(255, 255, 255);"><b>{{ a.dish_name }}</b></h4> 
-                <p style="color:rgb(255, 255, 255);">₹{{ a.price }}/-</p>  
-                <!-- <p style="color:rgb(255, 255, 255);">₹{{ a. }}/-</p>  -->
-            </div>
-            </center>
-        </div>
-        <hr color="white">
-        {% endfor %}
+<style>
+    body {
+        margin-top: 150px;
+        background-color: #1a1a1a;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
 
-    </form>
-</body>
-<!-- </html> -->
+    h2 {
+        text-align: center;
+        text-decoration: underline;
+    }
+
+    .cards-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .card {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 10px;
+        width: 22%;
+        box-sizing: border-box;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .container h4, .container p {
+        margin: 10px 0;
+        color: white;
+    }
+
+    @media (max-width: 992px) {
+        .card {
+            width: 45%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .card {
+            width: 90%;
+        }
+    }
+</style>
+
+<h2>DISHES AVAILABLE</h2>
+<form method="POST">
+    {% csrf_token %}
+    <div class="cards-wrapper">
+        {% for a in dishes %}
+        <div class="card">
+            <img src="{{ a.image.url }}" alt="food_image_not_found">
+            <div class="container">
+                <h4><b>{{ a.dish_name }}</b></h4>
+                <p>₹{{ a.price }}/-</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</form>
 {% endblock %}
