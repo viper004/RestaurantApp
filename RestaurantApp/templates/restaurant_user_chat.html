@@ -9,6 +9,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
+        body {
+      background-image: url("/static/bg.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+    }
+
     .single-chat-tab {
       width: 100%;
       max-width: 600px;
@@ -17,6 +25,7 @@
       border-radius: 10px;
       overflow: hidden;
     }
+    
     .chat-header {
       border-bottom: 2px solid rgba(0, 0, 0, 0.1);
       padding: 10px;
@@ -47,8 +56,8 @@
       align-self: flex-start;
     }
     .sender {
-      background: #008b17;
-      color: #fff;
+      background: #fea621;
+      color: #000000;
       align-self: flex-end;
       text-align: right;
     }
@@ -65,18 +74,38 @@
       border-radius: 5px;
     }
     .chat-footer button {
-      background: #008b17;
+      background: #ff9718;
       color: #fff;
       border: none;
       margin-left: 10px;
       padding: 8px 12px;
       border-radius: 5px;
     }
+    .back-link {
+  margin-left: 150px;
+}
+
+.back-link a {
+  color: #ffffff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
   </style>
 </head>
 <body>
   <div class="container">
     <div class="single-chat-tab mt-5">
+      <div class="back-link mt-3 ml-5">
+        <a href="{% url 'restaurant_home' %}" class="d-flex align-items-center">
+          <i class="material-icons mr-2">arrow_back</i> Back
+        </a>
+      </div>
+      
       <div class="chat-header">
         <div class="user-dp">
           <!-- <img src="/media/{{restaurant_reciever_id.image}}" alt="img"> -->

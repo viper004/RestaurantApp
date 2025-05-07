@@ -1,59 +1,91 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservations</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            /* background-image: url('static/bg.jpg');
-            background-position:center ;
-            background-size: cover; 
-            background-attachment: fixed; */
-            background-color: white;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
+{% extends 'staff_header.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        background-color: #f0f2f5;
+    }
+
+    h1 {
+        color: #002244;
+        margin-top: 80px;
+        text-align: center;
+        font-size: 2.5em;
+    }
+
+    table {
+        width: 90%;
+        max-width: 1000px;
+        margin: 40px auto;
+        border-collapse: separate;
+        border-spacing: 0;
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    th {
+        background-color: #5064ff;
+        color: white;
+        font-weight: bold;
+        padding: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    td {
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #ddd;
+        color: #333;
+    }
+
+    tr:nth-child(even) td {
+        background-color: #f7f9fc;
+    }
+
+    tr:hover td {
+        background-color: #eef1f8;
+        transition: background-color 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        table, thead, tbody, th, td, tr {
+            display: block;
         }
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
+        thead {
+            display: none;
         }
 
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
-            color: black    ;
+        td {
+            position: relative;
+            padding-left: 50%;
+            text-align: left;
         }
 
-        th {
-            background-color: #5064ff;
-            color: white;
+        td::before {
+            position: absolute;
+            left: 15px;
+            width: 45%;
+            white-space: nowrap;
             font-weight: bold;
+            color: #555;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #e2e2e2;
-            transition: 0.3s;
-        }
-    </style>
-</head>
-<body>
-    <h1 style="color: rgb(0, 0, 67);">Reservations</h1>
-    <table>
+        td:nth-child(1)::before { content: "Customer Name"; }
+        td:nth-child(2)::before { content: "Number of Seats"; }
+        td:nth-child(3)::before { content: "Booking Time"; }
+        td:nth-child(4)::before { content: "Booking Date"; }
+        td:nth-child(5)::before { content: "Additional Notes"; }
+    }
+</style>
+<h1>Reservations</h1>
+<table style="margin-left: 300px;margin-top: 20px;">
+    <thead>
         <tr>
             <th>Customer Name</th>
             <th>Number of Seats</th>
@@ -61,15 +93,17 @@
             <th>Booking Date</th>
             <th>Additional Notes</th>
         </tr>
+    </thead>
+    <tbody>
         {% for a in details %}
         <tr>
-            <td>{{a.user_id.name}}</td>
-            <td>{{a.number_of_people}}</td>
-            <td>{{a.rtime}}</td>
-            <td>{{a.rdate}}</td>
-            <td>{{a.notes}}</td>
+            <td>{{ a.user_id.name }}</td>
+            <td>{{ a.number_of_people }}</td>
+            <td>{{ a.rtime }}</td>
+            <td>{{ a.rdate }}</td>
+            <td>{{ a.notes }}</td>
         </tr>
         {% endfor %}
-    </table>
-</body>
-</html>
+    </tbody>
+</table>
+{% endblock %}

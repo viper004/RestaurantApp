@@ -1,56 +1,85 @@
-
 {% extends 'home-pages/restaurant_header.html' %}
 {% block content %}
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head> -->
 <style>
-    body{
+    body {
         margin: 0;
         margin-top: 150px;
         background-image: url(static/bg.jpg);
         background-size: cover;
         padding: 0;
-
     }
-    .card{
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
         animation: fadeSlideIn 1s ease-out;
     }
-    @keyframes fadeSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-    
+    .card {
+        width: 300px;
+        height: auto;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    @keyframes fadeSlideIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .add-staff-link {
+        margin-bottom: 30px;
+        display: inline-block;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        animation: fadeSlideIn 1s ease-out;
+    }
+
+    .add-staff-link:hover {
+        background-color: #0056b3;
+    }
+
 </style>
+
 <body>
     <center>
-        {% for a in staffs %}
+        <a href="{% url 'staff_registration' %}" class="add-staff-link">+ Add Staff</a>
+    </center>
 
-        <div class="card" style="width: 18rem;height: auto;">
-            <!-- <img src= "/media/{{a.image}}" class="card-img-top" alt="image-not-found" > -->
+    <div class="card-container">
+        {% for a in staffs %}
+        <div class="card">
             <div class="card-body">
-            <h5 class="card-title" style="color: black;">{{a.name}}</h5>
-            <p class="card-text" style="color: black;">{{a.contact}}</p>
-            <p class="card-text" style="color: black;">{{a.email}}</p>
-            <p class="card-text" style="color: black;">{{a.gender}}</p>
-            <a href="phoneto:{{a.contact}}" class="btn btn-primary">Contact</a>
+                <h5 class="card-title" style="color: black;">{{a.name}}</h5>
+                <p class="card-text" style="color: black;">{{a.contact}}</p>
+                <p class="card-text" style="color: black;">{{a.email}}</p>
+                <p class="card-text" style="color: black;">{{a.gender}}</p>
+                <a href="{% url 'restaurant_staff_chat' a.id %}" class="btn btn-success">MESSAGE</a>
             </div>
         </div>
-        <hr>
-
         {% endfor %}
-    </center>
+    </div>
 </body>
-</html>
 {% endblock %}

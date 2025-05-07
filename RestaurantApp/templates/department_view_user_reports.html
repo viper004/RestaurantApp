@@ -1,0 +1,87 @@
+{% extends 'home-pages/department_header.html' %}
+{% block content %}
+{% load static %}
+
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                            <span class="ml-1">Datatable</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% static 'admin/javascript:void(0)' %}">Table</a></li>
+                            <li class="breadcrumb-item active"><a href="{% static 'admin/javascript:void(0)' %}">Datatable</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Basic Datatable</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="example" class="display" style="min-width: 845px; border-collapse: separate; border-spacing: 15px 10px;">
+                                        <thead style="color: black;">
+                                            <tr>
+                                                <th style="padding: 15px;">User</th>
+                                                <th style="padding: 15px;">User Email</th>
+                                                <th style="padding: 15px;">Restaurant</th>
+                                                <th style="padding: 15px;">Restaurant Email</th>
+                                                <th style="padding: 15px;">Text</th>
+                                                <th style="padding: 15px;">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="color: black;">
+                                            {% for a in data %}
+                                            <tr>
+                                                <td style="padding: 15px;">
+                                                    <a href="#" style="color: black;"
+                                                       data-toggle="tooltip"
+                                                       data-placement="top"
+                                                       title="Name: {{ a.user_id.name }}&#10;Email: {{ a.user_id.login_id.email }}&#10;Contact: {{ a.user_id.contact }}">
+                                                       {{ a.user_id.name }}
+                                                    </a>
+                                                  </td>
+                                                  
+                                                <td style="padding: 15px;">{{ a.user_id.login_id.email }}</td>
+                                                <td style="padding: 15px;">{{ a.restuarant_id.name }}</td>
+                                                <td style="padding: 15px;">{{ a.restuarant_id.login_id.email }}</td>
+                                                <td style="padding: 15px;">{{ a.text }}</td>
+                                                <td style="padding: 15px;">
+                                                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                                        <a href="../admin_freeze_restaurant/{{ a.restuarant_id.id }}" class="btn btn-success" style="color: white; text-decoration: none;">Freeze Restaurant</a>
+
+                                                        <a href="mailto:{{a.user_id.login_id.email}}" class="btn btn-danger" style="color: white; text-decoration: none;">Contact User</a>
+                                                    </div>
+                                                </td>
+                                                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                   
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        {% endblock %}

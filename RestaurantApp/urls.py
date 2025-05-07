@@ -79,7 +79,13 @@ urlpatterns = [
     path('department_approve/<int:id>',views.department_approve,name='department_approve'),
     path('department_delete/<int:id>',views.department_delete,name='department_delete'),
     path('view_full_application/<int:id>',views.view_full_application,name='view_full_application'),
-    path('delete_application/<int:id>',views.delete_application,name='delete_application')
-
+    path('delete_application/<int:id>',views.delete_application,name='delete_application'),
+    path('forward_to_dept/<int:id>',views.forward_to_dept,name='forward_to_dept'),
+    path('department_view_user_reports',views.department_view_user_reports,name='department_view_user_reports'),
+    path('admin_view_transactions',views.admin_view_transactions,name='admin_view_transactions'),
+    path('restaurant_view_review',views.restaurant_view_review,name='restaurant_view_review'),
+    path('recommended_view',views.recommended_view,name='recommended_view'),
+    path('restaurant_staff_chat/<int:id>',views.restaurant_staff_chat,name='restaurant_staff_chat'),
+    path('staff_restaurant_chat',views.staff_restaurant_chat,name='staff_restaurant_chat')
 
 ]+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

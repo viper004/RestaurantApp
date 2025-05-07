@@ -1,6 +1,5 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'user_header.html' %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,6 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
             text-align: center;
             position: relative;
         }
@@ -21,7 +19,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('static/bg.jpg') center/cover no-repeat;
             filter: blur(5px);
             z-index: -1;
         }
@@ -44,7 +41,7 @@
         }
 
         th {
-            background-color: #cda45e;
+            background-color: #e19e2a;
             color: rgb(0, 0, 0);
             font-weight: bold;
         }
@@ -65,7 +62,7 @@
     </style>
 </head>
 <body>
-    <h1 style="color: white;">Your Public Reviews</h1>
+    <h1 style="color: white;text-align: center;">Your Public Reviews</h1>
     <table border="1">
         <tr>
             <th>Restaurant</th>
@@ -99,5 +96,4 @@
         }
     </style>
     
-</body>
-</html>
+{% endblock %}

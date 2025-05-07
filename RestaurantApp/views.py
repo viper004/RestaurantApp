@@ -14,7 +14,12 @@ def index(request):
     return render(request,'index.html')
 
 def admin(request):
-    return render(request, 'home-pages/admin_home.html')
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect('index')
+    a=Restaurants.objects.all().count()
+    b=Staffs.objects.all().count()
+    return render(request, 'home-pages/admin_home.html',{'a':a,'b':b})
 
 def login(request):
     return render(request,'login.html')
@@ -39,71 +44,83 @@ def user_register(request):
     return render(request, 'registration-pages/user_register.html',{'form':form,'login':login})
 
 def admin_user_view(request):
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
      a = Users.objects.all()
      return render(request, 'admin-account-view/admin_user_view.html',{'data':a})
 
 def login_action(request):
-    if request.method=="POST":
-        form=loginform(request.POST)
+    if request.method == "POST":
+        form = loginform(request.POST)
         if form.is_valid():
-            email=form.cleaned_data['email']
-            password=form.cleaned_data['password']
-        try:
-            user = Login.objects.filter(email=email).first()
-            if user.password==password:
-                if user.usertype==1:
-                    request.session['user_id']=user.id
-                    return redirect('user_home')
-                elif user.usertype==2:
-                    resstaurant=get_object_or_404(Restaurants,login_id=user.id)
-                    request.session['restaurant_id']=user.id
-                    if resstaurant.have_certificate==0:
-                        return render(request,'no_certificate.html',{'data':resstaurant})
-                    if resstaurant.department_approved==0:
-                        return render(request,'home-pages/pending_restaurant_home.html')
-                    if resstaurant.approval_status==0:
-                        return render(request,'home-pages/pending_restaurant_home.html')
-                    if resstaurant.approval_status==2:
-                        return render(request,'home-pages/freezed_Restaurant_home.html')
-                    
-                    # if user.id.approval_status==2:
-                    #     return render(request,'freezed_Restaurant_home.html')
-                    return redirect('restaurant_home')
-                elif user.usertype==3:
-                    request.session['staff_id']=user.id
-                    return redirect('staff_home')
-                elif user.usertype==4:
-                    request.session['department_id']=user.id
-                    return redirect('department_home')
-                    
-                else:
-                    messages.error(request,'Incorrect Password')
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
 
-        except Login.DoesNotExist:
-            messages.error(request,'User Does Not Exist')
+            user = Login.objects.filter(email=email).first()
+            if user is not None:
+                if user.password == password:
+                    if user.usertype == 1:
+                        request.session['user_id'] = user.id
+                        return redirect('user_home')
+                    elif user.usertype == 2:
+                        resstaurant = get_object_or_404(Restaurants, login_id=user.id)
+                        request.session['restaurant_id'] = user.id
+                        if resstaurant.have_certificate == 0:
+                            return render(request, 'no_certificate.html', {'data': resstaurant})
+                        if resstaurant.department_approved == 0 or resstaurant.approval_status == 0:
+                            return render(request, 'home-pages/pending_restaurant_home.html')
+                        if resstaurant.approval_status == 2:
+                            return render(request, 'home-pages/freezed_Restaurant_home.html')
+                        return redirect('restaurant_home')
+                    elif user.usertype == 3:
+                        request.session['staff_id'] = user.id
+                        return redirect('staff_home')
+                    elif user.usertype == 4:
+                        request.session['department_id'] = user.id
+                        return redirect('department_home')
+                    elif user.usertype==5:
+                        request.session['admin_id']=user.id
+                        return redirect('adminpage')
+                else:
+                    messages.error(request, 'Incorrect Password')
+            else:
+                messages.error(request, 'User Does Not Exist')
     else:
-        form=loginform()
-    return render(request,'login.html',{'form':form})
+        form = loginform()
+    return render(request, 'login.html', {'form': form})
+
 
 def user_home(request):
     user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     login_details=get_object_or_404(Login,id=user_id)
     user_details=get_object_or_404(Users,login_id=login_details)
     return render(request,'home-pages/user_home.html',{'details':user_details})
 
 def restaurant_home(request):
     restaurant_id=request.session.get('restaurant_id')
+    if not restaurant_id:
+        return redirect('index')
     res=Restaurants.objects.get(login_id=restaurant_id)
     return render(request,'home-pages/restaurant_home.html',{'details':res})
 
 def staff_home(request):
+    staff_id=request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     return render(request,'home-pages/staff_home.html')
 
 def department_home(request):
+    department_id=request.session.get('department_id')
+    if not department_id:
+        return redirect('index')
     return render(request,'home-pages/department_home.html')
 
 def user_profile(request):
     user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     login_details=get_object_or_404(Login,id=user_id)
     data=get_object_or_404(Users,login_id=user_id)
     if request.method=='POST':
@@ -120,6 +137,8 @@ def user_profile(request):
 
 def restaurant_profile(request):
     restaurant_id = request.session.get('restaurant_id')
+    if not restaurant_id:
+        return redirect('index')
     login_details = get_object_or_404(Login, id=restaurant_id)
     data = get_object_or_404(Restaurants, login_id=restaurant_id)
 
@@ -157,6 +176,9 @@ def restaurant_profile(request):
     })
 
 def restaurant_profile_update(request,id):
+    res=request.session.get('restaurant_id')
+    if not res:
+        return redirect('index')
     restaurant=Restaurants.objects.get(id=id)
 
     return redirect('restaurant_profile')
@@ -193,6 +215,8 @@ def restaurant_registration(request):
 
 def staff_profile(request):
     staff_id=request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     login_details=get_object_or_404(Login,id=staff_id)
     data=get_object_or_404(Staffs,login_id=staff_id)
     if request.method=='POST':
@@ -208,6 +232,10 @@ def staff_profile(request):
     return render(request,'staff_profile_edit.html',{'form':form,'form2':form2})
 
 def staff_registration(request):
+    restaurant_id = request.session.get('restaurant_id')
+    if not restaurant_id:
+        return redirect('index')
+    res_id = get_object_or_404(Restaurants,login_id=restaurant_id)
     if request.method=='POST':
         form=staff_form(request.POST,request.FILES)
         login=login_form(request.POST)
@@ -217,7 +245,9 @@ def staff_registration(request):
             a.save()
             b=form.save(commit=False)
             b.login_id=a
+            b.restaurant_name=res_id
             b.save()
+            
             messages.success(request,"Form successfully submitted")
             return redirect('index')
     else:
@@ -227,6 +257,9 @@ def staff_registration(request):
     return render(request,'registration-pages/staff_registration.html',{'form':form,'login':login})
 
 def food_and_safety_department_registration(request):
+    dept=request.session.get('department_id')
+    if not dept:
+        return redirect('index')
     if request.method=='POST':
         form=food_and_safety_department_form(request.POST,request.FILES)
         login=login_form(request.POST)
@@ -246,16 +279,25 @@ def food_and_safety_department_registration(request):
     return render(request,'registration-pages/food_and_safety_registration.html',{'form':form,'login':login})
 
 def admin_view_pending_restaurant(request):
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect('index')
     data=Restaurants.objects.filter(approval_status = 0 , department_approved = 1)
     return render(request,'admin-account-view/admin_view_pending_restaurant.html',{'a':data})
 
 def admin_approve_restaurant(request,id):
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect('index')
     restaurant=get_object_or_404(Restaurants,id=id)
     restaurant.approval_status=1
     restaurant.save()
     return redirect('admin_view_pending_restaurant')
 
 def admin_reject_restaurant(request,id):
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect('index')
     restaurant=get_object_or_404(Restaurants,id=id)
     b=restaurant.login_id
     restaurant.delete()
@@ -264,30 +306,54 @@ def admin_reject_restaurant(request,id):
     return redirect('admin_view_pending_restaurant')
 
 def admin_freeze_restaurant(request,id):
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect('index')
     restaurant=get_object_or_404(Restaurants,id=id)
     restaurant.approval_status=2
     restaurant.save()
     return redirect('admin_restaurant_view')
 
 def admin_view_freezed_restaurants(request):
+    admin_id=request.session.get('admin_id')
+    if not admin_id:
+        return redirect('index')
     data=Restaurants.objects.filter(approval_status=2)
     return render(request,'admin-account-view/admin_view_freezed_restaurants.html',{'a':data})
 
 
 def admin_restaurant_view(request):
+     admin_id=request.session.get('admin_id')
+     if not admin_id:
+        return redirect('index')
      data=Restaurants.objects.filter(approval_status=1)
      return render(request,'admin-account-view/admin_restaurant_view.html',{'a':data})
 
 def admin_staff_view(request):
+     admin_id=request.session.get('admin_id')
+     if not admin_id:
+        return redirect('index')
      data=Staffs.objects.all()
      return render(request,'admin-account-view/admin_staff_view.html',{'a':data})
 
 def restaurant_cards(request):
-    restaurants=Restaurants.objects.filter(approval_status=1)
-    return render(request,'restaurant_cards.html',{'restaurants':restaurants})
+    user = request.session.get('user_id')
+    if not user:
+        return redirect('index')
+
+    query = request.GET.get('q')
+    if query:
+        restaurants = Restaurants.objects.filter(name__icontains=query, approval_status=1)
+    else:
+        restaurants = Restaurants.objects.filter(approval_status=1)
+
+    return render(request, 'restaurant_cards.html', {'restaurants': restaurants})
+
 
 def staff_cards(request):
     res_id=request.session.get('restaurant_id')
+    if not res_id:
+        return redirect('index')
     login_details=get_object_or_404(Login,id=res_id)
     data=get_object_or_404(Restaurants,login_id=login_details)
     staffs=Staffs.objects.filter(restaurant_name=data)
@@ -296,6 +362,8 @@ def staff_cards(request):
 
 def add_dish(request):
     staff_id = request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     login_details = get_object_or_404(Login, id=staff_id)
     data = get_object_or_404(Staffs, login_id=login_details)
     if request.method == 'POST':
@@ -313,6 +381,8 @@ def add_dish(request):
 
 def restaurant_dish_view(request):
     user_login = request.session.get('restaurant_id')
+    if not user_login:
+        return redirect('index')
     print(user_login)
     restaurant = get_object_or_404(Restaurants,login_id=user_login)
     dishes = Dishes.objects.filter(login_id__restaurant_name=restaurant)
@@ -322,6 +392,8 @@ def restaurant_dish_view(request):
 
 def user_restaurant_view(request,id):
     user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     user=get_object_or_404(Users,login_id=user_id)
     log_details=get_object_or_404(Login,id=user_id)
     details=get_object_or_404(Restaurants,id=id)
@@ -339,11 +411,16 @@ def user_restaurant_view(request,id):
 
 def staff_dish_view(request):
     staff=request.session.get('staff_id')
+    if not staff:
+        return redirect('index')
     login_details=Staffs.objects.get(login_id=staff)
     dishes=Dishes.objects.filter(login_id=login_details)
     return render(request,'staff_dish_view.html',{'dishes':dishes})
 
 def staff_dish_edit(request,id):
+    staff=request.session.get('staff_id')
+    if not staff:
+        return redirect('index')
     data=get_object_or_404(Dishes,id=id)
     if request.method=='POST':
         form=dishes_form(request.POST,request.FILES,instance=data)
@@ -355,11 +432,17 @@ def staff_dish_edit(request,id):
     return render(request,'staff_dish_edit.html',{'dishes':form})
 
 def dish_remove(request,id):
+    staff_id=request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     dishes=get_object_or_404(Dishes,id=id)
     dishes.delete()
     return redirect('staff_dish_view')
 
 def add_to_menu(request,id):
+    staff_id=request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     dishes=get_object_or_404(Dishes,id=id)
     dishes.status=1
     dishes.save()
@@ -368,6 +451,8 @@ def add_to_menu(request,id):
 
 def staff_menu_view(request):
     staff_id = request.session.get('staff_id') 
+    if not staff_id:
+        return redirect('index')
     login_details = get_object_or_404(Login, id=staff_id)  
     staff = get_object_or_404(Staffs, login_id=login_details) 
     dishes = Dishes.objects.filter(login_id=staff, status=1)
@@ -375,6 +460,9 @@ def staff_menu_view(request):
 
 
 def menu_item_remove(request,id):
+    staff_id = request.session.get('staff_id') 
+    if not staff_id:
+        return redirect('index')
     dishes=get_object_or_404(Dishes,id=id)
     dishes.status=0
     dishes.save()
@@ -383,6 +471,8 @@ def menu_item_remove(request,id):
 
 def add_to_cart(request, restaurant_id, product_id):
     user=request.session.get('user_id')
+    if not user:
+        return redirect('index')
     log_details=get_object_or_404(Users,login_id=user)
     restaurant = get_object_or_404(Restaurants,id=restaurant_id)
     quantity = int(request.POST.get('quantity', 1))
@@ -399,6 +489,8 @@ def add_to_cart(request, restaurant_id, product_id):
 
 def user_cart_view(request):
     user=request.session.get('user_id')
+    if not user:
+        return redirect('index')
     log_details=get_object_or_404(Users,login_id=user)
     product=UserCart.objects.filter(user_id=log_details).exclude(remove_status=1)
     return render(request,'user_cart.html',{'products':product})
@@ -516,6 +608,8 @@ def pay_at_pickup(request,id):
 
 def user_order_view(request):
     user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     log_details=get_object_or_404(Users,login_id=user_id)
     user_cart=UserCart.objects.filter(user_id=log_details,payment_status=1).exclude(cancel_status=1)
     return render(request,'user_order_view.html',{'details':user_cart})
@@ -529,11 +623,13 @@ def user_cancel_order(request,id):
 def restaurant_order_view(request):
     res_id=request.session.get('restaurant_id')
     log_details=get_object_or_404(Restaurants,login_id=res_id)
-    orders=UserCart.objects.filter(restaurant_loginid=log_details,payment_status=1).select_related('user_id__users').order_by('current_time')
+    orders=UserCart.objects.filter(restaurant_loginid=log_details,payment_status=1).select_related('user_id__login_id').order_by('current_time')
     return render(request,'restaurant_order_view.html',{'details':orders})
 
 def user_restaurant_chat(request,id):
     usr=request.session.get('user_id')
+    if not usr:
+        return redirect('index')
     user=get_object_or_404(Users,login_id=usr)
     restaurant_details=get_object_or_404(Restaurants,id=id)
     # user_sender=Chat.objects.filter(user_sender_id=user,restaurant_reciever_id=restaurant_details)
@@ -564,6 +660,8 @@ def user_restaurant_chat(request,id):
 
 def restaurant_chat_list_view(request):
     res_id=request.session.get('restaurant_id')  
+    if not res_id:
+        return redirect('index')
     restaurant=get_object_or_404(Restaurants,login_id=res_id)
     res=Chat.objects.filter(restaurant_reciever_id=restaurant)
     print(res)
@@ -573,6 +671,8 @@ def restaurant_chat_list_view(request):
 
 def restaurant_user_chat(request,id):
     res=request.session.get('restaurant_id')
+    if not res:
+        return render ('index')
     restaurant=get_object_or_404(Restaurants,login_id=res)
     user=Users.objects.get(id=id)
     if request.method=='POST':
@@ -622,12 +722,16 @@ def table_reservation(request,id):
 
 def restaurant_reservation_view(request):
     res_id=request.session.get('restaurant_id')
+    if not res_id:
+        return redirect('index')
     reservation=get_object_or_404(Restaurants,login_id=res_id)
     reservations = Table.objects.filter(restaurant_id=reservation).order_by('-rdate', '-rtime')
     return render(request,'restaraunt_reservation_view.html',{'details':reservations})
 
 def staff_reservation_view(request):
     staff_id=request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     current_date = timezone.now().date() 
     staff=get_object_or_404(Staffs,login_id=staff_id)
     reservations=Table.objects.filter(restaurant_id=staff.restaurant_name,rdate=current_date).order_by('-rtime')
@@ -648,6 +752,8 @@ def order_ready(request,id):
 
 def user_reservation_view(request):
     user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     user=get_object_or_404(Users,login_id=user_id)
     reservations=Table.objects.filter(user_id=user).order_by('-rdate', '-rtime')
     print(reservations)
@@ -675,6 +781,8 @@ def user_write_review(request, id):
 
 def user_review_view(request):
     user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
     user=get_object_or_404(Users,login_id=user_id)
     reviews=Reviews.objects.filter(user_id=user).order_by('-current_date')
     return render(request,'user_review_view.html',{'details':reviews})
@@ -735,7 +843,7 @@ def user_report_restaurant(request,id):
     return render(request,'report_to_admin.html',{'restaurant':restaurant})
 
 def admin_view_user_report(request):
-    reports=UserReports.objects.all()
+    reports=UserReports.objects.filter(forward_to_dept=0)
     return render(request,'admin_report_view.html',{'data':reports})
 
 def view_ratings(request,id):
@@ -745,8 +853,8 @@ def view_ratings(request,id):
 
 
 def logout_view(request):
-    request.session.clear()
-    return redirect('login')
+    request.session.flush()
+    return redirect('index')
 
 # from django.views.decorators.csrf import csrf_exempt
 import json
@@ -787,10 +895,16 @@ def view_announcements(request):
     return render(request,'view_announcements.html',{'announcements':announcements})
 
 def restaurant_view_announcement(request):
+    restaurant_id=request.session.get('restaurant_id')
+    if not restaurant_id:
+        return redirect('index')
     announcements=Announcements.objects.all().order_by('-current_date', '-current_time')
     return render(request,'restaurant_view_announcement.html',{'announcements':announcements})
 
 def certificate_application(request):
+    res_id=request.session.get('restaurant_id')
+    if not res_id:
+        return redirect('index')
     if request.method=='POST':
         res=request.session.get('restaurant_id')
         restaurant=get_object_or_404(Restaurants,login_id=res)
@@ -845,3 +959,111 @@ def delete_application(request,id):
     application.delete()
     return redirect('view_certificate_applications')
     
+def forward_to_dept(request,id):
+    report=UserReports.objects.get(id=id)
+    report.forward_to_dept=1
+    report.save()
+    return redirect ('admin_view_user_report')
+
+def department_view_user_reports(request):
+    reports=UserReports.objects.filter(forward_to_dept=1)
+    return render(request,'department_view_user_reports.html',{'data':reports})
+
+def admin_view_transactions(request):
+    carts = UserCart.objects.filter(payment_status=1).order_by('-current_date','-current_time')
+    transactions = []
+
+    for cart in carts:
+        # Matching cartid in PaymentDetails (it's stored as CharField)
+        payments = PaymentDetails.objects.filter(cart_id=str(cart.cartid))
+        transactions.append({
+            'cart': cart,
+            'payments': payments
+        })
+
+    return render(request, 'admin_view_transactions.html', {'transactions': transactions})
+
+def restaurant_view_review(request):
+    res_id = request.session.get('restaurant_id')
+    if not res_id:
+        return redirect('index')
+    login=get_object_or_404(Login,id=res_id)
+    restaurant=Restaurants.objects.get(login_id=login)
+    print (login)
+    
+    if not res_id:
+        # Optional: Handle case where restaurant_id isn't in session
+        return redirect('restaurant_login')  # or show error page
+
+    reviews = Reviews.objects.filter(restaurant_id=restaurant).order_by('-id')  # latest first
+    return render(request, 'restaurant_view_review.html', {'reviews': reviews})
+
+# def staff_restaurant_message(request):
+#     staff_id=request.session.get('staff_id')
+#     staff=get_object_or_404(Staffs,login_id=staff_id)
+#     restaurant=Staffs.objects.get(restaurant_name=staff.restaurant_name)
+#     if request.method=='POST':
+#         message=request.POST.get('messages'),
+#         StaffMessages.objects.create(
+#             staff_id=staff,
+#             restaurant_id=restaurant,
+#             message=message
+#         )
+#     else:
+#         messages=StaffMessages.objects.filter(staff_id=staff)
+#     return render(request,'staff_restaurant_message.html',{'messages':messages})
+
+from collections import Counter
+from .models import UserCart, Dishes
+
+def recommend_dishes_for_user(user):
+    # Step 1: Get all paid cart items for the user
+    paid_carts = UserCart.objects.filter(user_id=user, payment_status=1)
+
+    # Step 2: Get purchased dish IDs and their categories
+    purchased_dishes = [cart.product_id for cart in paid_carts]
+    purchased_dish_ids = [dish.id for dish in purchased_dishes]
+    purchased_categories = [dish.category for dish in purchased_dishes]
+
+    # Step 3: Count most common categories or dishes
+    common_categories = Counter(purchased_categories).most_common()
+    # Optionally: common_dishes = Counter(purchased_dish_ids).most_common()
+
+    # Step 4: Recommend dishes from similar categories not already purchased
+    recommendations = Dishes.objects.filter(
+        category__in=[cat[0] for cat in common_categories]
+    ).exclude(id__in=purchased_dish_ids, status=0)[:10]  # Only active dishes
+
+    return recommendations
+
+def recommended_view(request):
+    user_id=request.session.get('user_id')
+    if not user_id:
+        return redirect('index')
+    print(user_id)
+    # user=get_object_or_404(Users,login_id=user_id)
+    user = Users.objects.get(login_id=user_id)  # Adjust based on auth system
+    recommended_dishes = recommend_dishes_for_user(user)
+    return render(request, 'recommendations.html', {'dishes': recommended_dishes})
+
+def restaurant_staff_chat(request,id):
+    res=request.session.get('restaurant_id')
+    restaurant=Restaurants.objects.get(login_id=res)
+    staff=get_object_or_404(Staffs,id=id)
+    if request.method=='POST':
+        message=request.POST.get('message')
+        StaffMessages.objects.create(
+            staff_id=staff,
+            restaurant_id=restaurant,
+            messages=message
+        )
+    return render(request,'restaurant_staff_message.html',{'staff_data':staff})
+
+def staff_restaurant_chat(request):
+    staff_id=request.session.get('staff_id')
+    staff=Staffs.objects.get(login_id=staff_id)
+    restaurant=staff.restaurant_name
+    messages = StaffMessages.objects.filter(staff_id=staff).order_by('-current_date', '-current_time')
+
+    print(messages)
+    return render(request,'staff_restaurant_message.html',{'message_data':messages})

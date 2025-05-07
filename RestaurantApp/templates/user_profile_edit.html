@@ -1,137 +1,195 @@
 {% extends 'user_header.html' %}
 {% block content %}
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
-</head> -->
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+    
+    }
+
+    .form-wrapper {
+        min-height: calc(100vh - 70px); /* adjust 70px to your actual header height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .container {
+        background: transparent;
+        /* backdrop-filter: blur(10px); */
+        padding: 20px;
+        border-radius: 10px;
+        /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); */
+        width: 600px;
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+        color: rgb(255, 255, 255);
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .input-group label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: rgb(255, 255, 255);
+        text-align: left;
+        display: block;
+    }
+
+    input, select, textarea {
+        width: 90%;
+        font-size: 15px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        background: rgb(255, 255, 255);
+        transition: 0.3s;
+    }
+
+    input::placeholder {
+        color: rgba(126, 117, 117, 0.7);
+    }
+
+    input:hover, select:hover, textarea:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    input:focus, select:focus, textarea:focus {
+        background: rgba(58, 0, 0, 0.4);
+    }
+
+    .btn {
+        background: #000000;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .btn:hover {
+        background: #ffffff;
+        color: black;
+        transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
 <body>
-    <!-- <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            display: grid;
-            place-items: center;
-            margin: 0;
-            background-image: url('static/bg.jpg') !important;
-            background-size: cover;
-        }
-    
-        .container {
-            background: rgba(255, 255, 255, 0.612);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-            width: 600px;
-            text-align: center;
-            animation: fadeIn 1s ease-in-out;
-        }
-    
-        h2 {
-            color: rgb(0, 0, 0);
-            font-size: 30px;
-            margin-bottom: 15px;
-        }
-    
-        .form-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-    
-        .input-group label {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: black;
-            text-align: left;
-            display: block;
-        }
-    
-        input, select, textarea {
-            width: 90%;
-            font-size: 15px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            outline: none;
-            background: rgb(255, 255, 255);
-            transition: 0.3s;
-        }
-    
-        input::placeholder {
-            color: rgba(126, 117, 117, 0.7);
-        }
-    
-        input:hover, select:hover, textarea:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-    
-        input:focus, select:focus, textarea:focus {
-            background: rgba(58, 0, 0, 0.4);
-        }
-    
-        .btn {
-            background: #000000;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s ease-in-out;
-            width: 100%;
-            margin-top: 15px;
-        }
-    
-        .btn:hover {
-            background: #ffffff;
-            color: black;
-            transform: scale(1.05);
-        }
-    
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style> -->
-    
-    <div class="container">
-        <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm()">
-            <h2>Edit User</h2>
-            {% csrf_token %}
-            <div class="form-group">
-                <div class="input-group">
-                    {{ form.as_p }}
+    <div class="form-wrapper">
+        <div class="container">
+            <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm()" id="profileForm">
+                <h2>Edit User</h2>
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="input-group">
+                        {{ form.as_p }}
+                    </div>
+                    <div class="input-group">
+                        {{ form2.as_p }}
+                    </div>
                 </div>
-                <div class="input-group">
-                    {{ form2.as_p }}
-                </div>
-            </div>
-            <button type="submit" class="btn">EDIT</button>
-        </form>
+                <button type="submit" class="btn">EDIT</button>
+            </form>
+        </div>
     </div>
     
     <script>
-        function validateForm() {
-            let inputs = document.querySelectorAll("input");
-            for (let input of inputs) {
-                if (input.value.trim() === "") {
-                    alert("Please fill out all fields.");
-                    return false;
+        window.onload = function () {
+            const validators = [];
+    
+            function handleValidation(input, pattern, validMsg, invalidMsg) {
+                const feedback = document.createElement('small');
+                feedback.style.display = 'block';
+                input.parentNode.appendChild(feedback);
+    
+                function validate() {
+                    const value = input.value.trim();
+                    if (!value) {
+                        feedback.textContent = '❌ This field is required';
+                        feedback.style.color = 'red';
+                        return false;
+                    } else if (!pattern.test(value)) {
+                        feedback.textContent = '❌ ' + invalidMsg;
+                        feedback.style.color = 'red';
+                        return false;
+                    } else {
+                        feedback.textContent = '✅ ' + validMsg;
+                        feedback.style.color = 'green';
+                        return true;
+                    }
                 }
+    
+                input.addEventListener('input', validate);
+                validators.push(validate);
             }
-            return true;
-        }
-    </script>
+    
+            // Update these selectors based on your Django form field names
+            const nameInput = document.querySelector('input[name="name"]');
+            const contactInput = document.querySelector('input[name="contact"]');
+            const emailInput = document.querySelector('input[name="email"]');
+            const passwordInput = document.querySelector('input[name="password"]');
+    
+            if (nameInput) {
+                handleValidation(nameInput, /^[A-Za-z ]+$/, 'Valid name', 'Name must contain only letters and spaces');
+            }
+    
+            if (contactInput) {
+                handleValidation(contactInput, /^\d{10}$/, 'Valid phone number', 'Enter a valid 10-digit phone number');
+            }
+    
+            if (emailInput) {
+                handleValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Valid email address', 'Enter a valid email address');
+            }
+    
+            if (passwordInput) {
+                handleValidation(passwordInput, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, 'Strong password', 'Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character');
+            }
+    
+            // Prevent form submission if any validation fails
+            const form = document.getElementById('profileForm');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    let isValid = true;
+                    validators.forEach(validateFn => {
+                        if (!validateFn()) isValid = false;
+                    });
+                    if (!isValid) {
+                        e.preventDefault();
+                        alert("❌ Please fix the validation errors before submitting.");
+                    }
+                });
+            }
+        };
+        </script>
+    
+
+
 </body>
 <!-- </html> -->
  {% endblock %}

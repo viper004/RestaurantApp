@@ -1,5 +1,5 @@
-<html>
-    <head>
+{% extends 'home-pages/restaurant_header.html' %}
+{% block content %}
         <title> Edit Details- Restaurant</title>
 <style>
     body {
@@ -69,7 +69,6 @@
     }
 }
 </style>
-    </head>
 <body>
 
 
@@ -95,5 +94,74 @@
         <input type="submit" value="EDIT">
     </form>
 </div>
-</body>
-</html>
+<script>
+        window.onload = function () {
+            const validators = [];
+    
+            function handleValidation(input, pattern, validMsg, invalidMsg) {
+                const feedback = document.createElement('small');
+                feedback.style.display = 'block';
+                input.parentNode.appendChild(feedback);
+    
+                function validate() {
+                    const value = input.value.trim();
+                    if (!value) {
+                        feedback.textContent = '❌ This field is required';
+                        feedback.style.color = 'red';
+                        return false;
+                    } else if (!pattern.test(value)) {
+                        feedback.textContent = '❌ ' + invalidMsg;
+                        feedback.style.color = 'red';
+                        return false;
+                    } else {
+                        feedback.textContent = '✅ ' + validMsg;
+                        feedback.style.color = 'green';
+                        return true;
+                    }
+                }
+    
+                input.addEventListener('input', validate);
+                validators.push(validate);
+            }
+    
+            // Update these selectors based on your Django form field names
+            const nameInput = document.querySelector('input[name="name"]');
+            const contactInput = document.querySelector('input[name="contact"]');
+            const emailInput = document.querySelector('input[name="email"]');
+            const passwordInput = document.querySelector('input[name="password"]');
+    
+            if (nameInput) {
+                handleValidation(nameInput, /^[A-Za-z ]+$/, 'Valid name', 'Name must contain only letters and spaces');
+            }
+    
+            if (contactInput) {
+                handleValidation(contactInput, /^\d{10}$/, 'Valid phone number', 'Enter a valid 10-digit phone number');
+            }
+    
+            if (emailInput) {
+                handleValidation(emailInput, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Valid email address', 'Enter a valid email address');
+            }
+    
+            if (passwordInput) {
+                handleValidation(passwordInput, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, 'Strong password', 'Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character');
+            }
+    
+            // Prevent form submission if any validation fails
+            const form = document.getElementById('profileForm');
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    let isValid = true;
+                    validators.forEach(validateFn => {
+                        if (!validateFn()) isValid = false;
+                    });
+                    if (!isValid) {
+                        e.preventDefault();
+                        alert("❌ Please fix the validation errors before submitting.");
+                    }
+                });
+            }
+        };
+        </script>
+<!-- </body>
+</html> -->
+{% endblock %}

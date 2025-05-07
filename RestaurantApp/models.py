@@ -8,7 +8,7 @@ class Users(models.Model):
     
 
 class Login(models.Model):
-        email=models.CharField(max_length=100)
+        email=models.CharField(max_length=100,unique=True)
         password=models.CharField(max_length=100)
         usertype=models.IntegerField(default=0)
 
@@ -20,6 +20,7 @@ class Restaurants(models.Model):
     district = models.CharField(max_length=50)
     city = models.CharField(max_length=100)
     contact = models.CharField(max_length=100)
+    about=models.TextField(null=True)
     approval_status = models.IntegerField(default=0)
     login_id = models.ForeignKey('Login', on_delete=models.CASCADE)
     have_certificate = models.IntegerField(default=0)  # No choices here
@@ -35,7 +36,7 @@ class Staffs(models.Model):
     gender = models.CharField(max_length=20)
     age = models.IntegerField()
     contact = models.CharField(max_length=15)
-    restaurant_name = models.ForeignKey(Restaurants, on_delete=models.CASCADE, default=True, related_name='staffs')
+    restaurant_name = models.ForeignKey('Restaurants', on_delete=models.CASCADE, default=True, related_name='staffs')
     login_id = models.ForeignKey('Login', on_delete=models.CASCADE)
 
     
@@ -124,6 +125,7 @@ class UserReports(models.Model):
      user_id=models.ForeignKey('Users',on_delete=models.CASCADE)
      restuarant_id=models.ForeignKey('Restaurants',on_delete=models.CASCADE)
      text=models.CharField(max_length=500)
+     forward_to_dept=models.IntegerField(default=0)
 
 class Announcements(models.Model):
      subject=models.CharField(max_length=200)
@@ -143,3 +145,10 @@ class Certificate_Application(models.Model):
      tel=models.IntegerField(null=False)
      email=models.EmailField()
      current_date=models.DateField(auto_now_add=True)
+
+class StaffMessages(models.Model):
+    staff_id=models.ForeignKey('Staffs',on_delete=models.CASCADE,null=False)
+    restaurant_id=models.ForeignKey('Restaurants',on_delete=models.CASCADE,null=False)
+    messages=models.TextField()
+    current_date=models.DateField(auto_now_add=True)
+    current_time=models.TimeField(auto_now_add=True)

@@ -1,33 +1,92 @@
-
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'home-pages/restaurant_header.html' %}
+{% block content %}
+<!-- <!DOCTYPE html>
+<html lang="en"> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders-GoHotel</title>
+    <title>Orders - GoHotel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url(static/bg.jpg);
+            background-position: center;
+            background-size: cover;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 150px auto;
+            background: #ffffffb1;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #000000;
+            text-decoration: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #ff8400;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <center>
+    <div class="container">
         <h2>Orders</h2>
-        <table border="1px" style="border-collapse: collapse; width: 80%;">
-            <tr style="height: 50px;">
-                <th style="padding: 15px;">Item</th>
-                <th style="padding: 15px;">Customer</th>
-                <th style="padding: 15px;">Contact</th>
-                <th style="padding: 15px;">Order Date</th>
-                <th style="padding: 15px;">Order Time</th>
-                <th style="padding: 15px;">Payment Status</th>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Customer</th>
+                <th>Contact</th>
+                <th>Order Date</th>
+                <th>Order Time</th>
+                <th>Payment Status</th>
             </tr>
             {% for a in details %}
-            <tr style="height: 50px;">
-                <td style="padding: 15px;">{{a.product_id.dish_name}}</td>
-                <td style="padding: 15px;">{{a.user_id.login_id.name}}</td>
-                <td style="padding: 15px;">{{a.user_id.users.contact}}</td>
-                <td style="padding: 15px;">{{a.current_date}}</td>
-                <td style="padding: 15px;">{{a.current_time}}</td>
-                <td style="padding: 15px;">
+            <tr>
+                <td>{{ a.product_id.dish_name }}</td>
+                <td>{{ a.login_id.user_id.name }}</td>
+                <td>{{ a.user_id.users.contact }}</td>
+                <td>{{ a.current_date }}</td>
+                <td>{{ a.current_time }}</td>
+                <td>
                     {% if a.payment_method == 1 %}
-                    Card Payment
+                        Card Payment
                     {% elif a.payment_method == 2 %}
                         UPI Payment
                     {% else %}
@@ -37,7 +96,7 @@
             </tr>
             {% endfor %}
         </table>
-    </center>
-    
-</body>
-</html>
+    </div>
+<!-- </body>
+</html> -->
+{% endblock %}

@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'user_header.html' %}
+{% block content %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders - Go Hotel</title>
@@ -9,12 +8,8 @@
         /* General styles */
         body {
             font-family: Arial, sans-serif;
-            background-image: url('static/bg.jpg');
-            background-position: center;
-            background-size: cover;
-            background-attachment: fixed;
             margin: 0;
-            padding: 20px;
+            padding: 0px;
             text-align: center;
         }
 
@@ -83,7 +78,7 @@
     </style>
 </head>
 <body>
-    <h2>Orders</h2>
+    <h2 style="font-size: 50px;text-align: center;">Orders</h2>
     <table>
         <tr>
             <th>Item</th>
@@ -114,4 +109,4 @@
         {% endfor %}
     </table>
 </body>
-</html>
+{% endblock %}

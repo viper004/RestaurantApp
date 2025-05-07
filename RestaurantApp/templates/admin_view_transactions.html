@@ -1,0 +1,77 @@
+{% extends 'admin-account-view/admin_header.html' %}
+{% block content %}
+<style>
+    table {
+        margin: 100px auto;
+        width: 80%;
+        border-collapse: collapse;
+        background: #ffffffcc; /* light transparent background */
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        margin-left: 280px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        color: #333;
+    }
+
+    thead {
+        /* background-color: #140088; */
+        background-color: rgba(88, 115, 254, 0.04);
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+        transition: 0.3s;
+    }
+
+    th:first-child,
+    td:first-child {
+        border-left: 5px solid #48388f;
+    }
+</style>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Restaurant</th>
+                <th>Amount</th>
+                <th>Payment Method</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in transactions %}
+                {% for payment in a.payments %}
+                <tr>
+                    <td>{{ a.cart.user_id.id }}</td>
+                    <td>{{ a.cart.restaurant_loginid.name }}</td>
+                    <td>₹{{ payment.amount }}</td>
+                    <td>
+                        {% if payment.upi %}
+                            UPI ({{ payment.upi_id }})
+                        {% else %}
+                            Card (****{{ payment.card_number|slice:"-4:" }})
+                        {% endif %}
+                    </td>
+                    <td>{{ a.cart.current_date }}</td>
+                    <td>{{ a.cart.current_time }}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock %}

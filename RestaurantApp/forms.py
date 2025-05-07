@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from django.contrib.auth.hashers import make_password
 
 class user_form(forms.ModelForm):
     class Meta:
@@ -10,6 +11,13 @@ class login_form(forms.ModelForm):
     class Meta:
         model=Login
         fields=['email','password']
+
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     user.password = make_password(self.cleaned_data['password'])  # Hash here
+    #     if commit:
+    #         user.save()
+    #     return user
 
 class loginform(forms.Form):
     email=forms.CharField(max_length=100,widget=forms.TextInput(attrs={'placeholder':'Email'}))
@@ -23,7 +31,7 @@ class edit_user(forms.ModelForm):
 class restaurant_form(forms.ModelForm):
     class Meta:
         model=Restaurants
-        fields=['category','name','image','address','district','city','contact']
+        fields=['category','name','image','address','district','city','contact','about']
 
 
 
@@ -51,10 +59,6 @@ class certificate_form(forms.ModelForm):
         }
 
 class staff_form(forms.ModelForm):
-    restaurant_name = forms.ModelChoiceField(
-        queryset=Restaurants.objects.all(),
-        empty_label="Select restaurant"
-    )
 
     GENDER_CHOICES = [
         ('','Select Gender'),
@@ -65,7 +69,7 @@ class staff_form(forms.ModelForm):
     gender=forms.ChoiceField(choices=GENDER_CHOICES)
     class Meta:
         model = Staffs
-        fields = ['name', 'gender', 'age', 'contact', 'restaurant_name']
+        fields = ['name', 'gender', 'age', 'contact']
 
 class food_and_safety_department_form(forms.ModelForm):
     class Meta:

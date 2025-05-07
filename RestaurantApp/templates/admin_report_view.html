@@ -35,34 +35,41 @@
                                 <h4 class="card-title">Basic Datatable</h4>
                             </div>
                             <div class="card-body">
-                                <div style="color: black;" class="table-responsive">
-                                    <table id="example" class="display" style="min-width: 845px;" cellspacing="10">
-                                        <thead>
+                                <div class="table-responsive">
+                                    <table id="example" class="display" style="min-width: 845px; border-collapse: separate; border-spacing: 15px 10px;">
+                                        <thead style="color: black;">
                                             <tr>
-                                                <th>User</th>
-                                                <th>User Email</th>
-                                                <th>Restaurant</th>
-                                                <th>Restaurant Email</th>
-                                                <th>Text</th>
-                                                <th>Actions</th>
+                                                <th style="padding: 15px;">User</th>
+                                                <th style="padding: 15px;">User Email</th>
+                                                <th style="padding: 15px;">Restaurant</th>
+                                                <th style="padding: 15px;">Restaurant Email</th>
+                                                <th style="padding: 15px;">Text</th>
+                                                <th style="padding: 15px;">Actions</th>
                                             </tr>
-                                            {% for a in data %}
                                         </thead>
-                                        <tbody>
-                                        <tr style="height: 20px;">
-                                            <td>{{a.user_id.name}}</td>
-                                            <td>{{a.user_id.login_id.email}}</td>
-                                            <td>{{a.restuarant_id.name}}</td>
-                                            <td>{{a.restuarant_id.login_id.email}}</td>
-                                            <td>{{a.text}}</td>
-                                            <td><button class="btn btn-success"> <a href='../admin_freeze_restaurant/{{a.restuarant_id.id}}' style="color: white;">Freeze Restaurant  </a></button></td>
-                                        </tr>
-                                        {% endfor %}
+                                        <tbody style="color: black;">
+                                            {% for a in data %}
+                                            <tr>
+                                                <td style="padding: 15px;">{{ a.user_id.name }}</td>
+                                                <td style="padding: 15px;">{{ a.user_id.login_id.email }}</td>
+                                                <td style="padding: 15px;">{{ a.restuarant_id.name }}</td>
+                                                <td style="padding: 15px;">{{ a.restuarant_id.login_id.email }}</td>
+                                                <td style="padding: 15px;">{{ a.text }}</td>
+                                                <td style="padding: 15px;">
+                                                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                                        <a href="../admin_freeze_restaurant/{{ a.restuarant_id.id }}" class="btn btn-success" style="color: white; text-decoration: none;">Freeze Restaurant</a>
+
+                                                        <a href="{% url 'forward_to_dept' a.id %}" class="btn btn-danger" style="color: white; text-decoration: none;">Forward to Department</a>
+                                                    </div>
+                                                </td>
+                                                
+                                            </tr>
+                                            {% endfor %}
                                         </tbody>
-                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                    

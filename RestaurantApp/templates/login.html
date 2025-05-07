@@ -1,58 +1,84 @@
 {% load static %}
 <html>
-    <head>
-        <link href="{% static 'login/style.css' %}" type="text/css" rel="stylesheet">
-        <title>Login</title>
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="title-text">
-              <div class="title login">Login Form</div>
-              <div class="title signup">Signup Form</div>
-            </div>
-            <div class="form-container">
-              <div class="slide-controls">
-                <input type="radio" name="slide" id="login" checked>
-                <input type="radio" name="slide" id="signup">
-                <label for="login" class="slide login">Login</label>
-                <label for="signup" class="slide signup">Signup</label>
-                <div class="slider-tab"></div>
-              </div>
-              <div class="form-inner">
-                <form method="POST" class="login">
-                  {% csrf_token %}
-                  <div class="field">
-                    <input type="text"  name= "email" placeholder="Email Address" required>
-                  </div>
-                  <div class="field">
-                    <input type="password" name="password" placeholder="Password" required>
-                  </div>
-                  <div class="pass-link"><a href="#" target="new">Forgot password?</a></div>
-                  <div class="field btn">
-                    <div class="btn-layer"></div>
-                    <input type="submit" value="Login">
-                  </div>
-                  <div class="signup-link">Not a member? <a href="">Signup now</a></div>
-                </form>
-                <form action="#" class="signup">
-                  <div class="field">
-                    <input type="text" placeholder="Email Address" required>
-                  </div>
-                  <div class="field">
-                    <input type="password" placeholder="Password" required>
-                  </div>
-                  <div class="field">
-                    <input type="password" placeholder="Confirm password" required>
-                  </div>
-                  <div class="field btn">
-                    <div class="btn-layer"></div>
-                    <input type="submit" value="Signup">
-                  </div>
-                </form>
-              </div>
-            </div>
-        </div>
-      
-        <script src="{% static 'login/script.js' %}"></script>
-    </body>
+<head>
+  <link href="{% static 'login/style.css' %}" type="text/css" rel="stylesheet">
+  <title>Login</title>
+  <style>
+    .messages {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .messages li {
+      list-style: none;
+      margin: 5px 0;
+    }
+
+    .messages .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+  <a href="{% url 'index' %}" style="position: absolute; top: 50px; left: 50px; text-decoration: none; color: #ffffff; font-weight: bold;">← Go Back</a>
+  <div class="wrapper">
+    <div class="title-text">
+      <div class="title login">Login Form</div>
+    </div>
+    <div class="form-container">
+      <div class="form-inner">
+        <form method="POST" class="login" onsubmit="return validateForm()">
+          {% csrf_token %}
+
+          <!-- Display messages here -->
+          {% if messages %}
+          <ul class="messages">
+            {% for message in messages %}
+              <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+
+          <div class="field">
+            <input type="text" name="email" placeholder="Email Address" required>
+          </div>
+          <div class="field">
+            <input type="password" name="password" placeholder="Password" required>
+          </div>
+          <!-- <div class="pass-link"><a href="#" target="new">Forgot password?</a></div> -->
+          <div class="field btn">
+            <div class="btn-layer"></div>
+            <input type="submit" value="Login">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'login/script.js' %}"></script>
+  <script>
+    function validateForm() {
+      const email = document.querySelector('input[name="email"]').value.trim();
+      const password = document.querySelector('input[name="password"]').value.trim();
+
+      if (!email || !password) {
+        alert("Both fields are required.");
+        return false;
+      }
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        alert("Enter a valid email address.");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+
+</body>
 </html>

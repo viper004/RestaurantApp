@@ -1,6 +1,5 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'user_header.html' %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('static/bg.jpg');
-            background-position:center ;
-            background-size: cover; 
-            background-attachment: fixed;
             margin: 0;
-            padding: 20px;
+            padding: 0px;
             text-align: center;
         }
 
@@ -35,8 +30,8 @@
         }
 
         th {
-            background-color: #cda45e;
-            color: white;
+            background-color: #f8a921;
+            color: rgb(0, 0, 0);
             font-weight: bold;
         }
 
@@ -51,7 +46,7 @@
     </style>
 </head>
 <body>
-    <h1 style="color: white;">Reservations</h1>
+    <h1 style="color: white;font-size: 50px;text-align: center;">Reservations</h1>
     <table>
         <tr>
             <th>Restaurant Name</th>
@@ -73,4 +68,4 @@
         {% endfor %}
     </table>
 </body>
-</html>
+{% endblock %}
