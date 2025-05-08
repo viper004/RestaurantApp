@@ -100,9 +100,28 @@
         .rating label:hover ~ label {
             color: #ff5733;
         }
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .back-link:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
     </style>
 </head>
 <body>
+    <a href="{% url 'user_home' %}" class="back-link">&#8592; Back</a>
+
     <div class="review-container">
         <h2>Edit Your Review</h2>
 
@@ -145,7 +164,7 @@
             <label for="review-text">Write your review here:</label>
             <textarea name="review" id="review-text" required>{{ data.review }}</textarea>
             
-            <label for="image-upload">Add New Image (Optional):</label>
+            <label for="image-upload">Add New Image (Required):</label>
             <input type="file" name="image" id="image-upload" accept="image/*">
 
             <!-- Display current image if any exists -->

@@ -15,7 +15,7 @@
         padding: 40px 0;
     }
 
-    .container {
+    .cont {
         background: transparent;
         /* backdrop-filter: blur(10px); */
         padding: 20px;
@@ -58,15 +58,15 @@
     }
 
     input::placeholder {
-        color: rgba(126, 117, 117, 0.7);
+        color: rgb(255, 255, 255);
     }
 
     input:hover, select:hover, textarea:hover {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgb(255, 205, 155);
     }
 
     input:focus, select:focus, textarea:focus {
-        background: rgba(58, 0, 0, 0.4);
+        background: rgb(255, 149, 51);
     }
 
     .btn {
@@ -83,8 +83,8 @@
     }
 
     .btn:hover {
-        background: #ffffff;
-        color: black;
+        background: #ffae35;
+        color: rgb(255, 255, 255);
         transform: scale(1.05);
     }
 
@@ -102,7 +102,7 @@
 
 <body>
     <div class="form-wrapper">
-        <div class="container">
+        <div class="cont">
             <form method="POST" action="" enctype="multipart/form-data" onsubmit="return validateForm()" id="profileForm">
                 <h2>Edit User</h2>
                 {% csrf_token %}

@@ -86,6 +86,8 @@ urlpatterns = [
     path('restaurant_view_review',views.restaurant_view_review,name='restaurant_view_review'),
     path('recommended_view',views.recommended_view,name='recommended_view'),
     path('restaurant_staff_chat/<int:id>',views.restaurant_staff_chat,name='restaurant_staff_chat'),
-    path('staff_restaurant_chat',views.staff_restaurant_chat,name='staff_restaurant_chat')
+    path('staff_restaurant_chat',views.staff_restaurant_chat,name='staff_restaurant_chat'),
+    path('staff/dishes/search/', views.staff_dish_search, name='staff_dish_search'),
+
 
 ]+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)

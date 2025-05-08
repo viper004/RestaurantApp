@@ -2,67 +2,72 @@
 {% block content %}
 {% load static %}
 
-        <!--**********************************
-            Sidebar end
-        ***********************************-->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <span class="ml-1">Datatable</span>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Table</a></li>
+                    <li class="breadcrumb-item active"><a href="#">Datatable</a></li>
+                </ol>
+            </div>
+        </div>
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
-            <div class="container-fluid">
-                <div class="row page-titles mx-0">
-                    <div class="col-sm-6 p-md-0">
-                        <div class="welcome-text">
-                            <h4>Hi, welcome back!</h4>
-                            <span class="ml-1">Datatable</span>
-                        </div>
+        <!-- Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">User List</h4>
                     </div>
-                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{% static 'admin/javascript:void(0)' %}">Table</a></li>
-                            <li class="breadcrumb-item active"><a href="{% static 'admin/javascript:void(0)' %}">Datatable</a></li>
-                        </ol>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display custom-datatable" style="min-width: 845px;">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Contact Number</th>
+                                        <th>Email</th>
+                                        <th>Remove User</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in data %}
+                                    <tr>
+                                        <td>{{ a.name }}</td>
+                                        <td>{{ a.contact }}</td>
+                                        <td>{{ a.login_id.email }}</td>
+                                        <td><a href="{% url 'admin_remove_user' a.id %}"><img src="{% static 'delete_icon.png' %}" height="25px"></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <!-- row -->
+            </div>
+        </div>
 
+<style>
+    .custom-datatable th,
+    .custom-datatable td {
+        padding: 12px !important;
+        vertical-align: middle !important;
+        color: #000 !important;
+    }
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Basic Datatable</h4>
-                            </div>
-                            <div class="card-body">
-                                <div style="color: black;" class="table-responsive">
-                                    <table id="example" class="display" style="min-width: 845px">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Contact Number</th>
-                                                <th>Email</th>
-                                                <th>Remove User</th>
-                                            </tr>
-                                            {% for a in data %}
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td> {{ a.name }}</td>
-                                                <td> {{ a.contact }}</td>
-                                                <td> {{ a.login_id.email }}</td>
-                                                <td> <a href="{% url 'admin_remove_user' a.id }"><img src="static/delete_icon.png" height="25px"></a></td>
-                                            </tr>
-                                        {% endfor %}
-                                            
-                                        </tfoot>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        {% endblock %}
+    .custom-datatable {
+        width: 100%;
+        border-collapse: separate !important;
+        border-spacing: 0 10px !important;
+        background-color: white;
+    }
+</style>
+
+{% endblock %}

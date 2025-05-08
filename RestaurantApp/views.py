@@ -46,8 +46,9 @@ def user_register(request):
 def admin_user_view(request):
     admin_id=request.session.get('admin_id')
     if not admin_id:
-     a = Users.objects.all()
-     return render(request, 'admin-account-view/admin_user_view.html',{'data':a})
+        return redirect('index')
+    a = Users.objects.all()
+    return render(request, 'admin-account-view/admin_user_view.html',{'data':a})
 
 def login_action(request):
     if request.method == "POST":
@@ -484,7 +485,8 @@ def add_to_cart(request, restaurant_id, product_id):
         product_id=product,
         quantity=quantity
     )
-    return JsonResponse({"message": "Product added to cart successfully!"})
+    return redirect('user_cart_view')
+    # return JsonResponse({"message": "Product added to cart successfully!"})
 
 
 def user_cart_view(request):
@@ -492,7 +494,7 @@ def user_cart_view(request):
     if not user:
         return redirect('index')
     log_details=get_object_or_404(Users,login_id=user)
-    product=UserCart.objects.filter(user_id=log_details).exclude(remove_status=1)
+    product=UserCart.objects.filter(user_id=log_details,payment_status=0).exclude(remove_status=1)
     return render(request,'user_cart.html',{'products':product})
 
 def cart_item_remove(request,id):
@@ -615,7 +617,8 @@ def user_order_view(request):
     return render(request,'user_order_view.html',{'details':user_cart})
 
 def user_cancel_order(request,id):
-    cart=get_object_or_404(UserCart,id=id)
+    cart=UserCart.objects.get(id=id)
+    print(cart)
     cart.cancel_status=1
     cart.save()
     return redirect('user_order_view')
@@ -741,7 +744,7 @@ def staff_order_view(request):
     staff_id=request.session.get('staff_id')
     staff=get_object_or_404(Staffs,login_id=staff_id)
     current_date=timezone.now().date()
-    orders=UserCart.objects.filter(restaurant_loginid=staff.restaurant_name,current_date = current_date)
+    orders=UserCart.objects.filter(restaurant_loginid=staff.restaurant_name,current_date = current_date,payment_status=1,cancel_status=0)
     return render(request,'staff_order_view.html',{'details':orders})
 
 def order_ready(request,id):
@@ -1061,9 +1064,16 @@ def restaurant_staff_chat(request,id):
 
 def staff_restaurant_chat(request):
     staff_id=request.session.get('staff_id')
+    if not staff_id:
+        return redirect('index')
     staff=Staffs.objects.get(login_id=staff_id)
     restaurant=staff.restaurant_name
     messages = StaffMessages.objects.filter(staff_id=staff).order_by('-current_date', '-current_time')
 
     print(messages)
     return render(request,'staff_restaurant_message.html',{'message_data':messages})
+
+def staff_dish_search(request):
+    query = request.GET.get('query', '')
+    dishes = Dishes.objects.filter(dish_name__icontains=query)
+    return render(request, 'staff_dish_view.html', {'dishes': dishes})
